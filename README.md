@@ -19,3 +19,18 @@
         "input": "我想要订单系统详细设计总结"
     }'
     ```
+  
+
+
+# coding design
+1. currently every implementation are under the infra layer.
+2. each super layer provides core logic and interface
+
+```text
+├── ability     ---> the abilities. i.e. function-tools, knowledge-manage 
+├── application ---> the application later which is responsible for Ai logic, but not data logic.
+├── configure   ---> the configure for the whole application(no matter the layers)
+├── domain      ---> the domain model for core data property
+├── endpoint    ---> the endpoint for http restful request
+└── infra       ---> the implementations for each layer 
+```

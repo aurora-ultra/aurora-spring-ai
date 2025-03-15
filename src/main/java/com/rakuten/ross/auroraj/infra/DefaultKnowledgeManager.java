@@ -1,7 +1,7 @@
-package com.rakuten.ross.auroraj.ablity.knowledge.impl;
+package com.rakuten.ross.auroraj.infra;
 
-import com.rakuten.ross.auroraj.ablity.knowledge.KnowledgeException;
-import com.rakuten.ross.auroraj.ablity.knowledge.KnowledgeManager;
+import com.rakuten.ross.auroraj.ability.knowledge.KnowledgeException;
+import com.rakuten.ross.auroraj.ability.knowledge.KnowledgeManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.vectorstore.VectorStore;
@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 

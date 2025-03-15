@@ -1,4 +1,4 @@
-package com.rakuten.ross.auroraj.ablity.knowledge.impl;
+package com.rakuten.ross.auroraj.infra;
 
 
 import org.springframework.ai.document.Document;

@@ -1,6 +1,6 @@
-package com.rakuten.ross.auroraj.ablity.knowledge.impl;
+package com.rakuten.ross.auroraj.infra;
 
-import com.rakuten.ross.auroraj.ablity.knowledge.KnowledgeException;
+import com.rakuten.ross.auroraj.ability.knowledge.KnowledgeException;
 import org.springframework.ai.document.Document;
 import org.springframework.stereotype.Component;
 

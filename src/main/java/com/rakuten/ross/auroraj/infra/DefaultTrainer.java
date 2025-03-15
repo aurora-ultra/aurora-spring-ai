@@ -1,6 +1,6 @@
-package com.rakuten.ross.auroraj.application.impl;
+package com.rakuten.ross.auroraj.infra;
 
-import com.rakuten.ross.auroraj.ablity.knowledge.KnowledgeManager;
+import com.rakuten.ross.auroraj.ability.knowledge.KnowledgeManager;
 import com.rakuten.ross.auroraj.application.Trainer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

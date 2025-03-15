@@ -1,4 +1,4 @@
-package com.rakuten.ross.auroraj.ablity.tools;
+package com.rakuten.ross.auroraj.ability.tools;
 
 import com.rakuten.ross.auroraj.domain.XtrDocService;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.rakuten.ross.auroraj.ablity.knowledge;
+package com.rakuten.ross.auroraj.ability.knowledge;
 
 import java.nio.file.Path;
 import java.util.function.Predicate;
