@@ -22,7 +22,7 @@
   
 
 
-# coding design
+# Coding design
 1. currently every implementation are under the infra layer.
 2. each super layer provides core logic and interface
 
