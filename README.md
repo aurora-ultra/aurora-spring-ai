@@ -34,3 +34,9 @@
 ├── endpoint    ---> the endpoint for http restful request
 └── infra       ---> the implementations for each layer 
 ```
+
+
+
+# Todo
+1. Split the document
+2. Orchestrate user input into different handling flows
