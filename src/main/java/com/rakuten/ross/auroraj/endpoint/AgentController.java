@@ -2,7 +2,7 @@ package com.rakuten.ross.auroraj.endpoint;
 
 import com.rakuten.ross.auroraj.application.Agent;
 import com.rakuten.ross.auroraj.application.Trainer;
-import com.rakuten.ross.auroraj.domain.AtrSummary;
+import com.rakuten.ross.auroraj.application.AgentSummary;
 import com.rakuten.ross.auroraj.endpoint.request.ChatRequest;
 import com.rakuten.ross.auroraj.endpoint.request.LearnRequest;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +24,9 @@ public class AgentController {
     }
 
     @PostMapping("/chat")
-    public AtrSummary chat(@RequestBody ChatRequest chatRequest) {
+    public AgentSummary chat(@RequestBody ChatRequest chatRequest) {
         var userInput = chatRequest.getInput();
+        // todo need some dispatcher for the user input for different handlers.
         return agent.readXtrDocument(userInput);
     }
 }

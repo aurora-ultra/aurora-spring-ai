@@ -19,8 +19,7 @@ public class DefaultTrainer implements Trainer {
 
     @Override
     public void learn(String type) {
-        var suffix = "." + type;
-        var filter = (Predicate<Path>) path -> path.getFileName().endsWith(suffix);
+        var filter = (Predicate<Path>) path -> path.getFileName().endsWith("." + type);
         var root = Path.of("./material");
         knowledgeManager.learn(root, filter);
     }

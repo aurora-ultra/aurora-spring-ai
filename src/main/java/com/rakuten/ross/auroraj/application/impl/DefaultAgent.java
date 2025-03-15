@@ -2,7 +2,7 @@ package com.rakuten.ross.auroraj.application.impl;
 
 import com.rakuten.ross.auroraj.ablity.tools.DocumentTools;
 import com.rakuten.ross.auroraj.application.Agent;
-import com.rakuten.ross.auroraj.domain.AtrSummary;
+import com.rakuten.ross.auroraj.application.AgentSummary;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
@@ -23,7 +23,7 @@ public class DefaultAgent implements Agent {
     private final RedisVectorStore vectorStore;
 
     @Override
-    public AtrSummary readXtrDocument(String userInput) {
+    public AgentSummary readXtrDocument(String userInput) {
         return ChatClient.builder(chatModel)
             .build()
             .prompt()
@@ -34,7 +34,7 @@ public class DefaultAgent implements Agent {
             .tools(documentTools)
             .advisors(new SimpleLoggerAdvisor())
             .call()
-            .entity(AtrSummary.class);
+            .entity(AgentSummary.class);
     }
 
 

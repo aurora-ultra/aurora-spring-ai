@@ -6,7 +6,6 @@ import lombok.Data;
 @Data
 @Builder
 public class XtrDoc {
-    private String url;
     private String title;
     private String content;
 }
