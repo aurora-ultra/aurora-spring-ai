@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: aurora-agent
+
+  ai:
+    openai:
+      api-key: sk-SgvKCkKZMKjQua9Y45D61aF17c824832A6Ff339544A7E1A4
+      base-url: https://aiapi.cubeai.com.cn
+      chat:
+        options:
+          model: gpt-4o
+
+      embedding:
+        api-key: sk-SgvKCkKZMKjQua9Y45D61aF17c824832A6Ff339544A7E1A4
+        base-url: https://aiapi.cubeai.com.cn
+        options:
+          model: text-embedding-3-small
+
+    chat:
+      client:
+        enabled: true
+    vectorstore:
+      redis:
+        initialize-schema: true
+
+  data:
+    redis:
+      password: 111111
+
+logging:
+  level:
+    'org.springframework.ai': debug
+    'org.springframework.web.reactive.function.client': debug
+
