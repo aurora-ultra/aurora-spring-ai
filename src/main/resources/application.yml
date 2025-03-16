@@ -4,24 +4,16 @@ spring:
 
   ai:
     openai:
-      api-key: sk-SgvKCkKZMKjQua9Y45D61aF17c824832A6Ff339544A7E1A4
-      base-url: https://aiapi.cubeai.com.cn
+      api-key: GHCPUURPSO31GIW8XOR7QBNRRC5CYS6ORJXREM1S
+      base-url:  https://ai.gitee.com
       chat:
         options:
-          model: gpt-4o
+          model: Qwen2.5-Coder-32B-Instruct
 
-      embedding:
-        api-key: sk-SgvKCkKZMKjQua9Y45D61aF17c824832A6Ff339544A7E1A4
-        base-url: https://aiapi.cubeai.com.cn
-        options:
-          model: text-embedding-3-small
-
-    chat:
-      client:
-        enabled: true
     vectorstore:
       redis:
         initialize-schema: true
+        index: aurora-knowledge
 
   data:
     redis:
@@ -30,5 +22,4 @@ spring:
 logging:
   level:
     'org.springframework.ai': debug
-    'org.springframework.web.reactive.function.client': debug
 

@@ -16,7 +16,8 @@ public class DocumentTools {
     private final XtrDocService xtrDocService;
 
     @Tool(description = "查看某个文档内容")
-    public String readXtrDoc(@ToolParam(description = "url") String url) {
+    public String readUrl(@ToolParam(description = "url") String url) {
+        log.info("readXtrDoc url={}", url);
         if (url.contains("example.com")) {
             var doc = xtrDocService.getByUrl(url);
             return doc.getContent();

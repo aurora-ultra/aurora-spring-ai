@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DefaultKnowledgeManager implements KnowledgeManager {
 
-
     private final VectorStore vectorStore;
     private final KnowledgeTransformer knowledgeTransformer;
 

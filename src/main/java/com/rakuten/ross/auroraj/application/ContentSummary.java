@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class AgentSummary {
+public class ContentSummary {
 
     private String url;
 

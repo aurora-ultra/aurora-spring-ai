@@ -2,7 +2,7 @@ package com.rakuten.ross.auroraj.endpoint;
 
 import com.rakuten.ross.auroraj.application.Agent;
 import com.rakuten.ross.auroraj.application.Trainer;
-import com.rakuten.ross.auroraj.application.AgentSummary;
+import com.rakuten.ross.auroraj.application.ContentSummary;
 import com.rakuten.ross.auroraj.endpoint.request.ChatRequest;
 import com.rakuten.ross.auroraj.endpoint.request.LearnRequest;
 import lombok.RequiredArgsConstructor;
@@ -23,10 +23,15 @@ public class AgentController {
         trainer.learn(type);
     }
 
-    @PostMapping("/chat")
-    public AgentSummary chat(@RequestBody ChatRequest chatRequest) {
+    @PostMapping("/summary")
+    public ContentSummary summary(@RequestBody ChatRequest chatRequest) {
         var userInput = chatRequest.getInput();
-        // todo need some dispatcher for the user input for different handlers.
-        return agent.readXtrDocument(userInput);
+        return agent.summary(userInput);
+    }
+
+    @PostMapping("/chat")
+    public String chat(@RequestBody ChatRequest chatRequest) {
+        var userInput = chatRequest.getInput();
+        return agent.testFunctionCall(userInput);
     }
 }
