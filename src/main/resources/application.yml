@@ -4,11 +4,11 @@ spring:
 
   ai:
     openai:
-      api-key: GHCPUURPSO31GIW8XOR7QBNRRC5CYS6ORJXREM1S
-      base-url:  https://ai.gitee.com
+      api-key: sk-SgvKCkKZMKjQua9Y45D61aF17c824832A6Ff339544A7E1A4
+      base-url:  https://aiapi.cubeai.com.cn
       chat:
         options:
-          model: Qwen2.5-Coder-32B-Instruct
+          model: "gpt-4o"
 
     vectorstore:
       redis:
