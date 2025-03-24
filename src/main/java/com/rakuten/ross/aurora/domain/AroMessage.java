@@ -31,11 +31,9 @@ public class AroMessage {
 
     private List<AroMessageContent> content;
 
-
     public boolean isType(Type type) {
         return type == this.messageType;
     }
-
 
     @SuppressWarnings("unused")
     @Builder(builderClassName = "AssistantTypeBuilder", builderMethodName = "assistant")
@@ -64,8 +62,7 @@ public class AroMessage {
         return aroMessage;
     }
 
-
-    public List<Message> toMessages() {
+    public List<Message> toCompletionMessages() {
         var messages = new ArrayList<Message>();
 
         for (AroMessageContent aroMessageContent : this.getContent()) {

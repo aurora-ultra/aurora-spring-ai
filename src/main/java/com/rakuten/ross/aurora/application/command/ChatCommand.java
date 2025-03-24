@@ -11,6 +11,7 @@ import java.util.List;
 @Builder
 @RequiredArgsConstructor
 public class ChatCommand {
+    private final boolean search;
     private final String conversationId;
     private final List<AroMessageContent> contents;
 }

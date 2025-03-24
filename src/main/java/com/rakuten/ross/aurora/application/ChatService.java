@@ -1,7 +1,5 @@
 package com.rakuten.ross.aurora.application;
 
-import com.rakuten.ross.aurora.application.ability.DateTimeTools;
-import com.rakuten.ross.aurora.application.ability.DocumentTools;
 import com.rakuten.ross.aurora.application.command.ChatCommand;
 import com.rakuten.ross.aurora.application.support.TimeProvider;
 import com.rakuten.ross.aurora.domain.AroChatManager;
@@ -17,6 +15,7 @@ import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.redis.RedisVectorStore;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,24 +24,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ChatService {
 
-
-    private static final String DEFAULT_USER_TEXT_ADVISE = """
-        上下文信息如下，用 --------------------- 包围
-        
-        ---------------------
-        {question_answer_context}
-        ---------------------
-        
-        根据上下文和提供的历史信息（而非先验知识）回复用户评论。如果答案不在上下文中，请告知用户你无法回答该问题。
-        """;
-
-
     private final ChatModel chatModel;
     private final TimeProvider timeProvider;
     private final AroChatManager aroChatManager;
-
-    private final DocumentTools documentTools;
-    private final DateTimeTools dateTimeTools;
     private final RedisVectorStore vectorStore;
 
     // todo stream reply
@@ -57,11 +41,13 @@ public class ChatService {
         // todo can we use spring to implement the history or replace with summary?
         var chatHistory = aroChatManager.getHistory(command.getConversationId());
 
+        var advisors = getAdvisors(command);
+
         var reply = creatChatClient()
             .prompt()
-//            .advisors(getQuestionAnswerAdvisor())
+            .advisors(advisors)
             .messages(chatHistory.toMessages(5))
-            .messages(receiveMessage.toMessages())
+            .messages(receiveMessage.toCompletionMessages())
             .call()
             .content();
 
@@ -80,6 +66,14 @@ public class ChatService {
         return respondMessage;
     }
 
+    private ArrayList<Advisor> getAdvisors(ChatCommand command) {
+        var advisors = new ArrayList<Advisor>();
+        if (command.isSearch()) {
+            advisors.add(getQuestionAnswerAdvisor());
+        }
+        return advisors;
+    }
+
 
     private Advisor getQuestionAnswerAdvisor() {
         return new QuestionAnswerAdvisor(
@@ -87,7 +81,15 @@ public class ChatService {
             SearchRequest.builder()
                 .topK(2)
                 .build(),
-            DEFAULT_USER_TEXT_ADVISE
+            """
+                上下文信息如下，用 --------------------- 包围
+                
+                ---------------------
+                {question_answer_context}
+                ---------------------
+                
+                根据上下文和提供的历史信息（而非先验知识）回复用户评论。如果答案不在上下文中，请告知用户你无法回答该问题。
+                """
         );
     }
 

@@ -25,7 +25,7 @@ public final class AroChatHistory {
 
         return messages
             .stream()
-            .flatMap(aroMessage -> aroMessage.toMessages().stream())
+            .flatMap(aroMessage -> aroMessage.toCompletionMessages().stream())
             .toList();
     }
 }
