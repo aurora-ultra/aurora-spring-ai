@@ -59,7 +59,7 @@ public class ChatService {
 
         var reply = creatChatClient()
             .prompt()
-            .advisors(getQuestionAnswerAdvisor())
+//            .advisors(getQuestionAnswerAdvisor())
             .messages(chatHistory.toMessages(5))
             .messages(receiveMessage.toMessages())
             .call()

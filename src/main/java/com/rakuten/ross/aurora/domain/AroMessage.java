@@ -1,6 +1,7 @@
 package com.rakuten.ross.aurora.domain;
 
 import lombok.*;
+import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.UserMessage;
 
@@ -71,6 +72,10 @@ public class AroMessage {
 
             if (this.getMessageType() == Type.User) {
                 messages.add(new UserMessage(aroMessageContent.getText()));
+            }
+
+            if (this.getMessageType() == Type.Assistant) {
+                messages.add(new AssistantMessage(aroMessageContent.getText()));
             }
         }
         return messages;

@@ -16,12 +16,7 @@ import java.util.List;
 @Accessors(chain = true)
 public class AroMessageDto {
 
-    public enum Type {
-        User,
-        Assistant
-    }
-
-    private String id;
+    private String messageId;
 
     private String replyMessageId;
 

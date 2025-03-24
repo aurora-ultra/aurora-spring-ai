@@ -31,7 +31,7 @@ public class ChatConvertor {
 
     public AroMessageDto toDto(AroMessage message) {
         return  new AroMessageDto()
-            .setId(message.getMessageId())
+            .setMessageId(message.getMessageId())
             .setConversationId(message.getConversationId())
             .setSendTime(message.getSendTime())
             .setReplyMessageId(message.getReplyMessageId())
