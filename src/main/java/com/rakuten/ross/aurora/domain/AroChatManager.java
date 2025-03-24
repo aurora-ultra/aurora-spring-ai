@@ -17,4 +17,12 @@ public class AroChatManager {
     public void saveMessage(AroMessage message) {
         aroMessageRepository.save(message);
     }
+
+
+    public void saveMessage(AroMessage... message) {
+        for (AroMessage aroMessage : message) {
+            aroMessageRepository.save(aroMessage);
+        }
+
+    }
 }

@@ -8,6 +8,7 @@ import org.springframework.ai.chat.messages.UserMessage;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter(AccessLevel.PROTECTED)
@@ -37,13 +38,13 @@ public class AroMessage {
 
     @SuppressWarnings("unused")
     @Builder(builderClassName = "AssistantTypeBuilder", builderMethodName = "assistant")
-    static AroMessage fromAssistant(String messageId, String replyMessageId, LocalDateTime sendTime, String conversationId, List<AroMessageContent> content) {
+    static AroMessage fromAssistant(AroMessage userMessage, LocalDateTime sendTime, List<AroMessageContent> content) {
         var aroMessage = new AroMessage();
+        aroMessage.setMessageId(UUID.randomUUID().toString());
         aroMessage.setMessageType(Type.Assistant);
-        aroMessage.setMessageId(messageId);
-        aroMessage.setReplyMessageId(replyMessageId);
+        aroMessage.setReplyMessageId(userMessage.getMessageId());
+        aroMessage.setConversationId(userMessage.getConversationId());
         aroMessage.setSendTime(sendTime);
-        aroMessage.setConversationId(conversationId);
         aroMessage.setContent(content);
         return aroMessage;
     }

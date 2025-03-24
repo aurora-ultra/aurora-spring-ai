@@ -31,7 +31,7 @@ public class ChatService {
 
     // todo stream reply
     public AroMessage chat(ChatCommand command) {
-        var receiveMessage = AroMessage.user()
+        var userMessage = AroMessage.user()
             .messageId(UUID.randomUUID().toString())
             .conversationId(command.getConversationId())
             .sendTime(timeProvider.now())
@@ -47,23 +47,18 @@ public class ChatService {
             .prompt()
             .advisors(advisors)
             .messages(chatHistory.toMessages(5))
-            .messages(receiveMessage.toCompletionMessages())
+            .messages(userMessage.toCompletionMessages())
             .call()
             .content();
 
-        var respondMessage = AroMessage.assistant()
-            .messageId(UUID.randomUUID().toString())
-            .replyMessageId(receiveMessage.getMessageId())
-            .conversationId(command.getConversationId())
+        var assistantMessage = AroMessage.assistant()
             .sendTime(timeProvider.now())
             .content(List.of(AroMessageContent.of(reply)))
             .build();
 
-        // todo batch save message
-        aroChatManager.saveMessage(receiveMessage);
-        aroChatManager.saveMessage(respondMessage);
+        aroChatManager.saveMessage(userMessage, assistantMessage);
 
-        return respondMessage;
+        return assistantMessage;
     }
 
     private ArrayList<Advisor> getAdvisors(ChatCommand command) {
