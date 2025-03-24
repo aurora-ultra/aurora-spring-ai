@@ -1,4 +1,4 @@
-package com.rakuten.ross.aurora.application.model;
+package com.rakuten.ross.aurora.domain;
 
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import lombok.Builder;
@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class ContentSummary {
+public class AroSummary {
 
     private String url;
 

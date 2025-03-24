@@ -1,4 +1,4 @@
-package com.rakuten.ross.aurora.configure;
+package com.rakuten.ross.aurora.application.configure;
 
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.stereotype.Component;

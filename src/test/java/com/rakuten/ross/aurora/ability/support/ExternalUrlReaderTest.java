@@ -1,5 +1,6 @@
 package com.rakuten.ross.aurora.ability.support;
 
+import com.rakuten.ross.aurora.application.ability.support.ExternalUrlReader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

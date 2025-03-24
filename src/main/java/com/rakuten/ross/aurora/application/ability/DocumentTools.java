@@ -1,4 +1,4 @@
-package com.rakuten.ross.aurora.ability;
+package com.rakuten.ross.aurora.application.ability;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

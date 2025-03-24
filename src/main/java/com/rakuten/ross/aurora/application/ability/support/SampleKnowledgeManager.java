@@ -1,8 +1,8 @@
-package com.rakuten.ross.aurora.ability.support;
+package com.rakuten.ross.aurora.application.ability.support;
 
-import com.rakuten.ross.aurora.ability.KnowledgeConstants;
-import com.rakuten.ross.aurora.ability.KnowledgeException;
-import com.rakuten.ross.aurora.ability.KnowledgeManager;
+import com.rakuten.ross.aurora.application.ability.KnowledgeConstants;
+import com.rakuten.ross.aurora.application.ability.KnowledgeException;
+import com.rakuten.ross.aurora.application.ability.KnowledgeManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.document.Document;

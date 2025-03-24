@@ -1,4 +1,4 @@
-package com.rakuten.ross.aurora.ability;
+package com.rakuten.ross.aurora.application.ability;
 
 import java.net.URL;
 import java.util.Optional;

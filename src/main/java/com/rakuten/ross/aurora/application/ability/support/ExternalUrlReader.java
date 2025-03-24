@@ -1,6 +1,6 @@
-package com.rakuten.ross.aurora.ability.support;
+package com.rakuten.ross.aurora.application.ability.support;
 
-import com.rakuten.ross.aurora.ability.UrlReader;
+import com.rakuten.ross.aurora.application.ability.UrlReader;
 import org.springframework.stereotype.Component;
 
 import java.net.URL;

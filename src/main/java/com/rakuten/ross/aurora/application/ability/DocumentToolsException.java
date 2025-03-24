@@ -1,4 +1,4 @@
-package com.rakuten.ross.aurora.ability;
+package com.rakuten.ross.aurora.application.ability;
 
 public class DocumentToolsException extends RuntimeException {
     private DocumentToolsException(String message, Throwable cause) {

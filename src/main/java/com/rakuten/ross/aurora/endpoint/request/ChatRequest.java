@@ -1,12 +1,11 @@
 package com.rakuten.ross.aurora.endpoint.request;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+import com.rakuten.ross.aurora.application.dto.AroMessageContentVo;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class ChatRequest {
-
-    @Schema(example = "hello, Aurora!", defaultValue = "Hi, there")
-    private String message = "Hi, there";
-
+    private List<AroMessageContentVo> messages;
 }

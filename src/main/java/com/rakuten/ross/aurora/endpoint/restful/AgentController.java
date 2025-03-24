@@ -1,8 +1,8 @@
-package com.rakuten.ross.aurora.endpoint;
+package com.rakuten.ross.aurora.endpoint.restful;
 
-import com.rakuten.ross.aurora.application.Agent;
-import com.rakuten.ross.aurora.application.Trainer;
-import com.rakuten.ross.aurora.application.model.ContentSummary;
+import com.rakuten.ross.aurora.application.AgentService;
+import com.rakuten.ross.aurora.application.KnowledgeService;
+import com.rakuten.ross.aurora.domain.AroSummary;
 import com.rakuten.ross.aurora.endpoint.request.LearnRequest;
 import com.rakuten.ross.aurora.endpoint.request.SummaryRequest;
 import lombok.RequiredArgsConstructor;
@@ -14,24 +14,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AgentController {
 
-    private final Agent agent;
-    private final Trainer trainer;
+    private final AgentService agentService;
+    private final KnowledgeService knowledgeService;
 
     @PostMapping("/learn")
     public void learn(@RequestBody LearnRequest learnRequest) {
         var type = learnRequest.getType();
-        trainer.learn(type);
+        knowledgeService.learn(type);
     }
 
     @PostMapping("/summary")
-    public ContentSummary summary(@RequestBody SummaryRequest summaryRequest) {
+    public AroSummary summary(@RequestBody SummaryRequest summaryRequest) {
         var userInput = summaryRequest.getInput();
-        return agent.summary(userInput);
+        return agentService.summary(userInput);
     }
 
     @PostMapping("/test")
     public String chat(@RequestBody SummaryRequest summaryRequest) {
         var userInput = summaryRequest.getInput();
-        return agent.testFunctionCall(userInput);
+        return agentService.testFunctionCall(userInput);
     }
 }
