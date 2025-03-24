@@ -69,7 +69,6 @@ public class ChatService {
         return advisors;
     }
 
-
     private Advisor getQuestionAnswerAdvisor() {
         return new QuestionAnswerAdvisor(
             vectorStore,

@@ -3,6 +3,8 @@ package com.rakuten.ross.aurora.domain;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 @RequiredArgsConstructor
 public class AroChatManager {
@@ -14,15 +16,13 @@ public class AroChatManager {
         return AroChatHistory.of(messageHistories);
     }
 
-    public void saveMessage(AroMessage message) {
-        aroMessageRepository.save(message);
+    public Conversation createConversation() {
+        return new Conversation(UUID.randomUUID().toString());
     }
-
 
     public void saveMessage(AroMessage... message) {
         for (AroMessage aroMessage : message) {
             aroMessageRepository.save(aroMessage);
         }
-
     }
 }

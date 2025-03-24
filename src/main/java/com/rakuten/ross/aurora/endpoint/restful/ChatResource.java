@@ -30,4 +30,5 @@ public class ChatResource {
 
         return chatConvertor.toDto(reply);
     }
+
 }
