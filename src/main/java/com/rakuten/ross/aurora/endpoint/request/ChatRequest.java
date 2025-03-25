@@ -1,11 +1,11 @@
 package com.rakuten.ross.aurora.endpoint.request;
 
-import com.rakuten.ross.aurora.application.dto.AroMessageContentVo;
-import lombok.Data;
-
 import java.util.List;
+import com.rakuten.ross.aurora.application.vo.ChatMessageContentVo;
+import lombok.Data;
 
 @Data
 public class ChatRequest {
-    private List<AroMessageContentVo> messages;
+	private boolean search;
+	private List<ChatMessageContentVo> messages;
 }

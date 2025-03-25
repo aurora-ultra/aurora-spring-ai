@@ -1,6 +1,6 @@
 package com.rakuten.ross.aurora.application;
 
-import com.rakuten.ross.aurora.application.ability.KnowledgeManager;
+import com.rakuten.ross.aurora.application.ablity.knowledge.KnowledgeManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

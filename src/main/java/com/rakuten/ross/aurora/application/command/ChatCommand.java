@@ -1,17 +1,19 @@
 package com.rakuten.ross.aurora.application.command;
 
-import com.rakuten.ross.aurora.domain.AroMessageContent;
+import java.util.List;
+import com.rakuten.ross.aurora.domain.ChatMessageContent;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import java.util.List;
 
 @Getter
 @Builder
 @RequiredArgsConstructor
 public class ChatCommand {
-    private final boolean search;
-    private final String conversationId;
-    private final List<AroMessageContent> contents;
+
+	private final String conversationId;
+	private final ChatOption option;
+	private final List<ChatMessageContent> contents;
+
+
 }
