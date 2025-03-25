@@ -1,4 +1,4 @@
-package com.rakuten.ross.aurora.application.ablity.knowledge;
+package com.rakuten.ross.aurora.application.ablity.tools;
 
 import java.net.URL;
 import java.util.Optional;

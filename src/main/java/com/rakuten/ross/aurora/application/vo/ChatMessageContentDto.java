@@ -1,19 +1,20 @@
 package com.rakuten.ross.aurora.application.vo;
 
-import java.time.LocalDateTime;
 import com.rakuten.ross.aurora.core.layer.Dto;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Getter
 @Setter
-@Schema(name = "Conversation")
 @Accessors(chain = true)
-public class ConversationVo implements Dto {
+@Schema(name = "ChatMessageContent")
+public class ChatMessageContentDto implements Dto {
 
-	private String id;
+    @Schema(description = "The text of the message", example = "Hello!")
+    @NotBlank
+    private String text;
 
-	private LocalDateTime startTime;
 }

@@ -1,7 +1,5 @@
-package com.rakuten.ross.aurora.endpoint.request;
+package com.rakuten.ross.aurora.endpoint.model;
 
-import java.util.List;
-import com.rakuten.ross.aurora.application.vo.ChatMessageContentVo;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;

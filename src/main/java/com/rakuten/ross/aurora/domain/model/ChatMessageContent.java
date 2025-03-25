@@ -1,4 +1,4 @@
-package com.rakuten.ross.aurora.domain;
+package com.rakuten.ross.aurora.domain.model;
 
 import lombok.Getter;
 import lombok.Setter;

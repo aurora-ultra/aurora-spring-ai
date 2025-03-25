@@ -1,7 +1,7 @@
 package com.rakuten.ross.aurora.application.vo;
 
 import com.rakuten.ross.aurora.core.layer.Dto;
-import com.rakuten.ross.aurora.domain.ChatMessage;
+import com.rakuten.ross.aurora.domain.model.ChatMessage;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +14,7 @@ import java.util.List;
 @Setter
 @Schema(name = "ChatMessage")
 @Accessors(chain = true)
-public class ChatMessageVo implements Dto {
+public class ChatMessageDto implements Dto {
 
     private String messageId;
 
@@ -26,6 +26,6 @@ public class ChatMessageVo implements Dto {
 
     private String conversationId;
 
-    private List<ChatMessageContentVo> content;
+    private List<ChatMessageContentDto> content;
 
 }

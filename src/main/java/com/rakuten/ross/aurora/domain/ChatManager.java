@@ -1,5 +1,9 @@
 package com.rakuten.ross.aurora.domain;
 
+import com.rakuten.ross.aurora.domain.model.Agent;
+import com.rakuten.ross.aurora.domain.model.ChatHistory;
+import com.rakuten.ross.aurora.domain.model.ChatMessage;
+import com.rakuten.ross.aurora.domain.model.Conversation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

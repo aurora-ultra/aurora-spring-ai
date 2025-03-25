@@ -1,10 +1,10 @@
 package com.rakuten.ross.aurora.application.comvertor;
 
 import java.util.List;
-import com.rakuten.ross.aurora.application.vo.ChatMessageContentVo;
-import com.rakuten.ross.aurora.application.vo.ChatMessageVo;
-import com.rakuten.ross.aurora.domain.ChatMessage;
-import com.rakuten.ross.aurora.domain.ChatMessageContent;
+import com.rakuten.ross.aurora.application.vo.ChatMessageContentDto;
+import com.rakuten.ross.aurora.application.vo.ChatMessageDto;
+import com.rakuten.ross.aurora.domain.model.ChatMessage;
+import com.rakuten.ross.aurora.domain.model.ChatMessageContent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -14,27 +14,27 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ChatMessageConvertor {
 
-	public ChatMessageVo toVo(ChatMessage message) {
-		return new ChatMessageVo()
+	public ChatMessageDto toDto(ChatMessage message) {
+		return new ChatMessageDto()
 				.setMessageId(message.getMessageId())
 				.setConversationId(message.getConversationId())
 				.setSendTime(message.getSendTime())
 				.setReplyMessageId(message.getReplyMessageId())
 				.setConversationId(message.getConversationId())
 				.setMessageType(message.getMessageType())
-				.setContent(this.toVo(message.getContent()))
+				.setContent(this.toDto(message.getContent()))
 				;
 	}
 
-	public ChatMessageContentVo toVo(ChatMessageContent content) {
-		return new ChatMessageContentVo()
+	public ChatMessageContentDto toDto(ChatMessageContent content) {
+		return new ChatMessageContentDto()
 				.setText(content.getText())
 				;
 	}
 
-	public List<ChatMessageContentVo> toVo(List<ChatMessageContent> contents) {
+	public List<ChatMessageContentDto> toDto(List<ChatMessageContent> contents) {
 		return contents.stream()
-				.map(this::toVo)
+				.map(this::toDto)
 				.toList()
 				;
 	}

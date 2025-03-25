@@ -1,14 +1,14 @@
 package com.rakuten.ross.aurora.application.comvertor;
 
-import com.rakuten.ross.aurora.application.vo.ConversationVo;
-import com.rakuten.ross.aurora.domain.Conversation;
+import com.rakuten.ross.aurora.application.vo.ConversationDto;
+import com.rakuten.ross.aurora.domain.model.Conversation;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ConversationConvertor {
 
-	public ConversationVo toVo(Conversation conversation) {
-		return new ConversationVo()
+	public ConversationDto toVo(Conversation conversation) {
+		return new ConversationDto()
 				.setId(conversation.getId())
 				.setStartTime(conversation.getStartTime());
 	}

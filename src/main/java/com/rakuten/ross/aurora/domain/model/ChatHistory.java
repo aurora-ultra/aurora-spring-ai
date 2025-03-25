@@ -1,12 +1,12 @@
-package com.rakuten.ross.aurora.domain;
+package com.rakuten.ross.aurora.domain.model;
 
 import java.util.List;
-import com.rakuten.ross.aurora.core.layer.Model;
+import com.rakuten.ross.aurora.core.layer.DomainModel;
 import lombok.Getter;
 import org.springframework.ai.chat.messages.Message;
 
 @Getter
-public final class ChatHistory implements Model {
+public final class ChatHistory implements DomainModel {
 
 	private final List<ChatMessage> messages;
 

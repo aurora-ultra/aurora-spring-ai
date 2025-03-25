@@ -1,7 +1,7 @@
 package com.rakuten.ross.aurora.endpoint.restful;
 
 import com.rakuten.ross.aurora.application.KnowledgeService;
-import com.rakuten.ross.aurora.endpoint.request.LearnRequest;
+import com.rakuten.ross.aurora.endpoint.model.LearnRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;

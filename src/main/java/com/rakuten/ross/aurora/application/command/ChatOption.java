@@ -1,6 +1,6 @@
 package com.rakuten.ross.aurora.application.command;
 
-import com.rakuten.ross.aurora.core.layer.Dto;
+import java.io.Serializable;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @Builder
 @RequiredArgsConstructor
-public class ChatOption implements Dto {
+public class ChatOption implements Serializable {
 
 	private final boolean search;
 

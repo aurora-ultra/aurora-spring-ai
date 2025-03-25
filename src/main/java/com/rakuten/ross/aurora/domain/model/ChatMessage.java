@@ -1,10 +1,11 @@
-package com.rakuten.ross.aurora.domain;
+package com.rakuten.ross.aurora.domain.model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import com.rakuten.ross.aurora.core.layer.Model;
+import com.rakuten.ross.aurora.core.layer.DomainModel;
+import com.rakuten.ross.aurora.domain.PromptMessageCreator;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +18,7 @@ import org.springframework.ai.chat.messages.UserMessage;
 @Getter
 @Setter(AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ChatMessage implements Model, PromptMessageCreator {
+public class ChatMessage implements DomainModel, PromptMessageCreator {
 
 	public enum Type {
 		User,

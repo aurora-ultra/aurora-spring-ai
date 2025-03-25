@@ -4,8 +4,8 @@ import com.rakuten.ross.aurora.application.ChatService;
 import com.rakuten.ross.aurora.application.command.ChatCommand;
 import com.rakuten.ross.aurora.application.command.ChatOption;
 import com.rakuten.ross.aurora.application.comvertor.ChatMessageConvertor;
-import com.rakuten.ross.aurora.application.vo.ChatMessageContentVo;
-import com.rakuten.ross.aurora.endpoint.request.ChatRequest;
+import com.rakuten.ross.aurora.application.vo.ChatMessageContentDto;
+import com.rakuten.ross.aurora.endpoint.model.ChatRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class ChatResource {
 	private final ChatMessageConvertor chatMessageConvertor;
 
 	@PostMapping(path = "/{conversionId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-	public Flux<ChatMessageContentVo> chat(@PathVariable("conversionId") String conversionId, @RequestBody @Validated ChatRequest request) {
+	public Flux<ChatMessageContentDto> chat(@PathVariable("conversionId") String conversionId, @RequestBody @Validated ChatRequest request) {
 		var command = ChatCommand.builder()
 				.conversationId(conversionId)
 				.content(request.getUserInput())
@@ -37,11 +37,11 @@ public class ChatResource {
 						.build())
 				.build();
 		return chatService.chat(command)
-				.map(chatMessageConvertor::toVo);
+				.map(chatMessageConvertor::toDto);
 	}
 
 	@PostMapping(path = "/{conversionId}.test")
-	public Flux<ChatMessageContentVo> chatSync(@PathVariable("conversionId") String conversionId, @RequestBody @Valid ChatRequest request) {
+	public Flux<ChatMessageContentDto> chatSync(@PathVariable("conversionId") String conversionId, @RequestBody @Valid ChatRequest request) {
 		return chat(conversionId, request);
 	}
 

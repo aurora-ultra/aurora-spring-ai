@@ -1,4 +1,4 @@
-package com.rakuten.ross.aurora.endpoint.request;
+package com.rakuten.ross.aurora.endpoint.model;
 
 import lombok.Data;
 

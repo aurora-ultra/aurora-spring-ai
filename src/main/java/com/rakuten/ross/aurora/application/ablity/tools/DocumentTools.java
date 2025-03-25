@@ -1,6 +1,5 @@
 package com.rakuten.ross.aurora.application.ablity.tools;
 
-import com.rakuten.ross.aurora.application.ablity.knowledge.UrlReader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.tool.annotation.Tool;
