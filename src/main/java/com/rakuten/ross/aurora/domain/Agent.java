@@ -1,9 +1,8 @@
-package com.rakuten.ross.aurora.domain.model;
+package com.rakuten.ross.aurora.domain;
 
 import java.util.ArrayList;
 import java.util.List;
 import com.rakuten.ross.aurora.core.layer.DomainModel;
-import com.rakuten.ross.aurora.domain.PromptMessageCreator;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +14,7 @@ import org.springframework.ai.chat.messages.SystemMessage;
 @Getter
 @Setter(AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Agent implements DomainModel, PromptMessageCreator {
+public class Agent implements DomainModel, PromptMessageProvider {
 
 	private String agentId;
 	private String name;

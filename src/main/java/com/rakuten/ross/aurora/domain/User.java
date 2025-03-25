@@ -1,4 +1,4 @@
-package com.rakuten.ross.aurora.domain.model;
+package com.rakuten.ross.aurora.domain;
 
 import com.rakuten.ross.aurora.core.layer.DomainModel;
 import lombok.AccessLevel;

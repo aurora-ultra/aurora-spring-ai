@@ -1,9 +1,6 @@
 package com.rakuten.ross.aurora.domain;
 
-import com.rakuten.ross.aurora.domain.model.Agent;
-import com.rakuten.ross.aurora.domain.model.ChatHistory;
-import com.rakuten.ross.aurora.domain.model.ChatMessage;
-import com.rakuten.ross.aurora.domain.model.Conversation;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -20,7 +17,7 @@ public class ChatManager {
 		conversationRepository.save(conversation);
 	}
 
-	public Conversation getConversation(String conversationId) {
+	public Conversation getOrCreateConversation(String conversationId) {
 		Conversation conversation = new Conversation();
 		conversation.setId(conversationId);
 		Agent agent = new Agent();
@@ -32,16 +29,17 @@ public class ChatManager {
 		return conversation;
 	}
 
-	public ChatHistory getHistory(String conversionId) {
+	public ChatHistory getChatHistory(String conversionId) {
 		var messageHistories = chatMessageRepository.listByConversation(conversionId);
 		return ChatHistory.of(messageHistories);
 	}
 
-	public void saveMessage(ChatMessage... message) {
-		for (ChatMessage chatMessage : message) {
-			log.info("save message {}", chatMessage);
-			chatMessageRepository.save(chatMessage);
+	public void saveChatHistory(ChatHistory chatHistory) {
+		for (ChatMessage newMessage : chatHistory.getNewMessages()) {
+			log.info("save message to chat history {}", newMessage.getContent().stream().map(ChatMessageContent::getText).collect(Collectors.joining(";")));
+			chatMessageRepository.save(newMessage);
 		}
-	}
 
+		chatHistory.flush();
+	}
 }

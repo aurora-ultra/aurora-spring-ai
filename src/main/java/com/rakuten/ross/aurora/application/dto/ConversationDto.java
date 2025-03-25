@@ -13,7 +13,10 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class ConversationDto implements Dto {
 
+	@Schema(description = "The unique identifier of the conversation", example = "123456")
 	private String id;
 
+	@Schema(description = "The time the conversation started", example = "2021-01-01T00:00:00")
 	private LocalDateTime startTime;
+
 }

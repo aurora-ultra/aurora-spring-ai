@@ -1,5 +1,6 @@
-package com.rakuten.ross.aurora.domain.model;
+package com.rakuten.ross.aurora.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.rakuten.ross.aurora.core.layer.DomainModel;
 import lombok.Getter;
@@ -8,18 +9,28 @@ import org.springframework.ai.chat.messages.Message;
 @Getter
 public final class ChatHistory implements DomainModel {
 
-	private final List<ChatMessage> messages;
+	private final List<ChatMessage> oldMessages;
+	private final List<ChatMessage> newMessages;
 
 	private ChatHistory(List<ChatMessage> messages) {
-		this.messages = messages;
+		this.oldMessages = messages;
+		this.newMessages = new ArrayList<>();
 	}
 
 	static ChatHistory of(List<ChatMessage> messages) {
 		return new ChatHistory(messages);
 	}
 
-	public List<Message> toPromptMessages(int keepSize) {
-		var messages = getMessages();
+	public void add(ChatMessage message) {
+		newMessages.add(message);
+	}
+
+	public void flush() {
+		oldMessages.addAll(newMessages);
+	}
+
+	public List<Message> restorePromptMessages(int keepSize) {
+		var messages = getOldMessages();
 
 		messages = messages.subList(Math.max(0, messages.size() - keepSize), messages.size());
 
@@ -28,5 +39,6 @@ public final class ChatHistory implements DomainModel {
 				.flatMap(aroMessage -> aroMessage.createPromptMessages().stream())
 				.toList();
 	}
+
 
 }

@@ -1,11 +1,10 @@
-package com.rakuten.ross.aurora.domain.model;
+package com.rakuten.ross.aurora.domain;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import com.rakuten.ross.aurora.core.layer.DomainModel;
-import com.rakuten.ross.aurora.domain.PromptMessageCreator;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,7 +17,7 @@ import org.springframework.ai.chat.messages.UserMessage;
 @Getter
 @Setter(AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ChatMessage implements DomainModel, PromptMessageCreator {
+public class ChatMessage implements DomainModel, PromptMessageProvider {
 
 	public enum Type {
 		User,
@@ -54,7 +53,7 @@ public class ChatMessage implements DomainModel, PromptMessageCreator {
 	}
 
 	@Builder(builderClassName = "UserTypeBuilder", builderMethodName = "user")
-	public 	static ChatMessage fromUser(String messageId, String conversationId, LocalDateTime sendTime,  List<ChatMessageContent> content) {
+	public static ChatMessage fromUser(String messageId, String conversationId, LocalDateTime sendTime, List<ChatMessageContent> content) {
 		var aroMessage = new ChatMessage();
 		aroMessage.setMessageType(Type.User);
 		aroMessage.setMessageId(messageId);
@@ -64,11 +63,27 @@ public class ChatMessage implements DomainModel, PromptMessageCreator {
 		return aroMessage;
 	}
 
-	public ChatMessage reply(List<ChatMessageContent> content,LocalDateTime time ){
+	public ChatMessage reply(List<ChatMessageContent> content) {
 		return ChatMessage.assistant()
 				.userMessage(this)
-				.sendTime(time)
+				.sendTime(this.getSendTime())
 				.content(content)
+				.build();
+	}
+
+	public ChatMessage reply(ChatMessageContent content) {
+		return ChatMessage.assistant()
+				.userMessage(this)
+				.sendTime(this.getSendTime())
+				.content(List.of(content))
+				.build();
+	}
+
+	public ChatMessage reply(String content) {
+		return ChatMessage.assistant()
+				.userMessage(this)
+				.sendTime(this.getSendTime())
+				.content(List.of(ChatMessageContent.of(content)))
 				.build();
 	}
 

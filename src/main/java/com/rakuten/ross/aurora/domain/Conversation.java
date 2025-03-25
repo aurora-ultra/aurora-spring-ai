@@ -1,9 +1,8 @@
-package com.rakuten.ross.aurora.domain.model;
+package com.rakuten.ross.aurora.domain;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import com.rakuten.ross.aurora.core.layer.DomainModel;
-import com.rakuten.ross.aurora.domain.PromptMessageCreator;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +12,7 @@ import org.springframework.ai.chat.messages.Message;
 @Getter
 @Setter(AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Conversation implements DomainModel, PromptMessageCreator {
+public class Conversation implements DomainModel, PromptMessageProvider {
 
 	private String id;
 
@@ -21,7 +20,7 @@ public class Conversation implements DomainModel, PromptMessageCreator {
 
 	private Agent agent;
 
-	public static Conversation start(String id, LocalDateTime startTime) {
+	public static Conversation of(String id, LocalDateTime startTime) {
 		var conversation = new Conversation();
 		conversation.setId(id);
 		conversation.setStartTime(startTime);

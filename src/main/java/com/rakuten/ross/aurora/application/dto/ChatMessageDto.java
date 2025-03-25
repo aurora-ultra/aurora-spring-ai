@@ -1,14 +1,13 @@
 package com.rakuten.ross.aurora.application.dto;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import com.rakuten.ross.aurora.core.layer.Dto;
-import com.rakuten.ross.aurora.domain.model.ChatMessage;
+import com.rakuten.ross.aurora.domain.ChatMessage;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
@@ -16,16 +15,22 @@ import java.util.List;
 @Accessors(chain = true)
 public class ChatMessageDto implements Dto {
 
-    private String messageId;
+	@Schema(description = "The unique identifier of the message", example = "123456")
+	private String messageId;
 
-    private String replyMessageId;
+	@Schema(description = "The unique identifier of the message that this message is a reply to", example = "123456")
+	private String replyMessageId;
 
-    private LocalDateTime sendTime;
+	@Schema(description = "The time the message was sent", example = "2021-01-01T00:00:00")
+	private LocalDateTime sendTime;
 
-    private ChatMessage.Type messageType;
+	@Schema(description = "The type of the message", example = "User")
+	private ChatMessage.Type messageType;
 
-    private String conversationId;
+	@Schema(description = "The unique identifier of the conversation", example = "123456")
+	private String conversationId;
 
-    private List<ChatMessageContentDto> content;
+	@Schema(description = "The content of the message")
+	private List<ChatMessageContentDto> content;
 
 }

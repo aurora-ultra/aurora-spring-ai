@@ -13,8 +13,8 @@ import lombok.experimental.Accessors;
 @Schema(name = "ChatMessageContent")
 public class ChatMessageContentDto implements Dto {
 
-    @Schema(description = "The text of the message", example = "Hello!")
-    @NotBlank
-    private String text;
+	@Schema(description = "The text of the message", example = "Hello!")
+	@NotBlank
+	private String text;
 
 }

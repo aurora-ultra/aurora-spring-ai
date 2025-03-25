@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class AuroraJApplication {
+public class AuroraApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(AuroraJApplication.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(AuroraApplication.class, args);
+	}
 
 }
