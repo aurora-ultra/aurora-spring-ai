@@ -3,7 +3,6 @@ package com.rakuten.ross.aurora.application;
 import java.util.List;
 import java.util.UUID;
 import com.rakuten.ross.aurora.application.command.ChatCommand;
-import com.rakuten.ross.aurora.application.command.ChatReply;
 import com.rakuten.ross.aurora.application.command.ConversationStartCommand;
 import com.rakuten.ross.aurora.application.utils.ChatResponsesUtils;
 import com.rakuten.ross.aurora.core.support.TimeProvider;
@@ -18,12 +17,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.api.Advisor;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ChatService {
-	public static final int CHAT_RESPONSE_BUFFER_SIZE = 16;
+	public static final int CHAT_RESPONSE_BUFFER_SIZE = 2;
 	public static final int MAX_HISTORY_SIZE = 5;
 
 	private final TimeProvider timeProvider;
@@ -96,7 +96,7 @@ public class ChatService {
 
 		return ChatReply.builder()
 				.contents(contents)
-				.context(context)
+				.reply(Flux.defer(() -> Flux.just(chatHistory.getLast())))
 				.build();
 	}
 
