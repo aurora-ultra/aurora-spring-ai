@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ConversationConvertor {
 
-	public ConversationVo toDto(Conversation conversation) {
+	public ConversationVo toVo(Conversation conversation) {
 		return new ConversationVo()
 				.setId(conversation.getId())
 				.setStartTime(conversation.getStartTime());

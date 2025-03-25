@@ -2,7 +2,6 @@ package com.rakuten.ross.aurora.application.vo;
 
 import com.rakuten.ross.aurora.core.layer.Dto;
 import com.rakuten.ross.aurora.domain.ChatMessage;
-import com.rakuten.ross.aurora.domain.ChatMessageContent;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,6 +26,6 @@ public class ChatMessageVo implements Dto {
 
     private String conversationId;
 
-    private List<ChatMessageContent> content;
+    private List<ChatMessageContentVo> content;
 
 }

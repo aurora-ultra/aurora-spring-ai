@@ -18,14 +18,15 @@ public final class ChatHistory implements Model {
 		return new ChatHistory(messages);
 	}
 
-	public List<Message> toMessages(int keepSize) {
+	public List<Message> toPromptMessages(int keepSize) {
 		var messages = getMessages();
 
 		messages = messages.subList(Math.max(0, messages.size() - keepSize), messages.size());
 
 		return messages
 				.stream()
-				.flatMap(aroMessage -> aroMessage.toCompletionMessages().stream())
+				.flatMap(aroMessage -> aroMessage.createPromptMessages().stream())
 				.toList();
 	}
+
 }

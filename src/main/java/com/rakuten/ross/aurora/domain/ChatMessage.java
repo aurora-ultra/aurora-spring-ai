@@ -17,7 +17,7 @@ import org.springframework.ai.chat.messages.UserMessage;
 @Getter
 @Setter(AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ChatMessage implements Model {
+public class ChatMessage implements Model, PromptMessageCreator {
 
 	public enum Type {
 		User,
@@ -52,7 +52,6 @@ public class ChatMessage implements Model {
 		return aroMessage;
 	}
 
-
 	@Builder(builderClassName = "UserTypeBuilder", builderMethodName = "user")
 	public 	static ChatMessage fromUser(String messageId, String conversationId, LocalDateTime sendTime,  List<ChatMessageContent> content) {
 		var aroMessage = new ChatMessage();
@@ -64,7 +63,15 @@ public class ChatMessage implements Model {
 		return aroMessage;
 	}
 
-	public List<Message> toCompletionMessages() {
+	public ChatMessage reply(List<ChatMessageContent> content,LocalDateTime time ){
+		return ChatMessage.assistant()
+				.userMessage(this)
+				.sendTime(time)
+				.content(content)
+				.build();
+	}
+
+	public List<Message> createPromptMessages() {
 		var messages = new ArrayList<Message>();
 
 		for (ChatMessageContent chatMessageContent : this.getContent()) {
@@ -76,6 +83,7 @@ public class ChatMessage implements Model {
 			if (this.getMessageType() == Type.Assistant) {
 				messages.add(new AssistantMessage(chatMessageContent.getText()));
 			}
+
 		}
 		return messages;
 	}

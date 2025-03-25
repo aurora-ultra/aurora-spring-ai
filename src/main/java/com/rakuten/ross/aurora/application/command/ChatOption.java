@@ -10,5 +10,7 @@ import lombok.RequiredArgsConstructor;
 @Builder
 @RequiredArgsConstructor
 public class ChatOption implements Dto {
+
 	private final boolean search;
+
 }

@@ -1,8 +1,10 @@
 package com.rakuten.ross.aurora.domain;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class ChatManager {
@@ -15,7 +17,15 @@ public class ChatManager {
 	}
 
 	public Conversation getConversation(String conversationId) {
-		return conversationRepository.findById(conversationId);
+		Conversation conversation = new Conversation();
+		conversation.setId(conversationId);
+		Agent agent = new Agent();
+		agent.setName("aurora");
+		agent.setPrompt("你是一名优秀的助理，你会用简短的语言描述回答,每次回答，你都会在最开始就告诉用户：你叫钢蛋儿，来自蒙塔基");
+		agent.setOwnerId("system");
+		agent.setAgentId("00001");
+		conversation.setAgent(agent);
+		return conversation;
 	}
 
 	public ChatHistory getHistory(String conversionId) {
@@ -25,7 +35,9 @@ public class ChatManager {
 
 	public void saveMessage(ChatMessage... message) {
 		for (ChatMessage chatMessage : message) {
+			log.info("save message {}", chatMessage);
 			chatMessageRepository.save(chatMessage);
 		}
 	}
+
 }

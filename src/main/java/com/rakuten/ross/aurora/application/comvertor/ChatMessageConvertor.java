@@ -1,6 +1,5 @@
 package com.rakuten.ross.aurora.application.comvertor;
 
-import java.util.Collection;
 import java.util.List;
 import com.rakuten.ross.aurora.application.vo.ChatMessageContentVo;
 import com.rakuten.ross.aurora.application.vo.ChatMessageVo;
@@ -13,20 +12,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class ChatConvertor {
-
-	public ChatMessageContent toModel(ChatMessageContentVo chatMessageContentVo) {
-		return new ChatMessageContent()
-				.setText(chatMessageContentVo.getText())
-				;
-	}
-
-	public List<ChatMessageContent> toModel(Collection<ChatMessageContentVo> chatMessageContentVos) {
-		return chatMessageContentVos.stream()
-				.map(this::toModel)
-				.toList()
-				;
-	}
+public class ChatMessageConvertor {
 
 	public ChatMessageVo toVo(ChatMessage message) {
 		return new ChatMessageVo()
@@ -40,13 +26,13 @@ public class ChatConvertor {
 				;
 	}
 
-	private ChatMessageContent toVo(ChatMessageContent content) {
-		return new ChatMessageContent()
+	public ChatMessageContentVo toVo(ChatMessageContent content) {
+		return new ChatMessageContentVo()
 				.setText(content.getText())
 				;
 	}
 
-	private List<ChatMessageContent> toVo(List<ChatMessageContent> contents) {
+	public List<ChatMessageContentVo> toVo(List<ChatMessageContent> contents) {
 		return contents.stream()
 				.map(this::toVo)
 				.toList()
