@@ -3,6 +3,7 @@ package com.rakuten.ross.aurora.application;
 import java.util.List;
 import java.util.UUID;
 import com.rakuten.ross.aurora.application.command.ChatCommand;
+import com.rakuten.ross.aurora.application.command.ChatReply;
 import com.rakuten.ross.aurora.application.command.ConversationStartCommand;
 import com.rakuten.ross.aurora.application.utils.ChatResponsesUtils;
 import com.rakuten.ross.aurora.core.support.TimeProvider;
@@ -17,7 +18,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.api.Advisor;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
 
 @Slf4j
 @Service
@@ -43,7 +43,7 @@ public class ChatService {
 	// -------------------------------------------------------------
 	// now		user 	userMessage		conversation	chatOption
 	// todo can we use spring to implement the history or replace with summary?
-	public Flux<ChatMessageContent> chat(ChatCommand command) {
+	public ChatReply chat(ChatCommand command) {
 		var user = User.mock();
 		var chatOption = command.getOption();
 		var conversation = chatManager.getOrCreateConversation(command.getConversationId());
@@ -64,11 +64,10 @@ public class ChatService {
 		return this.chat(context);
 	}
 
-	private Flux<ChatMessageContent> chat(ChatContext context) {
+	private ChatReply chat(ChatContext context) {
 		var conversation = context.getConversation();
 		var chatHistory = context.getChatHistory();
 		var userMessage = context.getUserMessage();
-
 		var chatClient = getChatClient(context);
 		var advisors = getAdvisors(context);
 		var reply = new StringBuffer();
@@ -76,7 +75,7 @@ public class ChatService {
 		chatHistory.add(userMessage);
 		chatManager.saveChatHistory(chatHistory);
 
-		return chatClient
+		var contents = chatClient
 				.prompt()
 				.advisors(advisors)
 				.messages(conversation.createPromptMessages())
@@ -93,9 +92,12 @@ public class ChatService {
 					var replyMessage = userMessage.reply(reply.toString());
 					chatHistory.add(replyMessage);
 					chatManager.saveChatHistory(chatHistory);
-				})
-				;
+				});
 
+		return ChatReply.builder()
+				.contents(contents)
+				.context(context)
+				.build();
 	}
 
 	private List<Advisor> getAdvisors(ChatContext context) {

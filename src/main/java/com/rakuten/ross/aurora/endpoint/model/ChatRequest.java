@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class ChatRequest {
 
-	private boolean search=false;
+	private boolean search = false;
 
 	@Valid
 	@NotEmpty

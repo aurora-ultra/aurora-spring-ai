@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import com.rakuten.ross.aurora.core.layer.DomainModel;
 import lombok.Getter;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.ai.chat.messages.Message;
 
 @Getter
@@ -27,6 +28,13 @@ public final class ChatHistory implements DomainModel {
 
 	public void flush() {
 		oldMessages.addAll(newMessages);
+	}
+
+	public ChatMessage getLast() {
+		if (CollectionUtils.isNotEmpty(this.getNewMessages())) {
+			return this.getNewMessages().get(this.getNewMessages().size()-1);
+		}
+		return this.getOldMessages().get(this.getNewMessages().size()-1);
 	}
 
 	public List<Message> restorePromptMessages(int keepSize) {
