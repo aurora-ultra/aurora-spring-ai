@@ -3,7 +3,7 @@ package com.rakuten.ross.aurora.endpoint.restful;
 import com.rakuten.ross.aurora.application.ChatService;
 import com.rakuten.ross.aurora.application.command.ConversationStartCommand;
 import com.rakuten.ross.aurora.application.comvertor.ConversationConvertor;
-import com.rakuten.ross.aurora.application.vo.ConversationDto;
+import com.rakuten.ross.aurora.application.dto.ConversationDto;
 import com.rakuten.ross.aurora.endpoint.model.ConversationStartRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

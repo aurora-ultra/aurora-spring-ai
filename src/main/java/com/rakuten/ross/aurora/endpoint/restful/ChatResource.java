@@ -4,7 +4,7 @@ import com.rakuten.ross.aurora.application.ChatService;
 import com.rakuten.ross.aurora.application.command.ChatCommand;
 import com.rakuten.ross.aurora.application.command.ChatOption;
 import com.rakuten.ross.aurora.application.comvertor.ChatMessageConvertor;
-import com.rakuten.ross.aurora.application.vo.ChatMessageContentDto;
+import com.rakuten.ross.aurora.application.dto.ChatMessageContentDto;
 import com.rakuten.ross.aurora.endpoint.model.ChatRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

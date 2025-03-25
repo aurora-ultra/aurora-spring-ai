@@ -1,4 +1,4 @@
-package com.rakuten.ross.aurora.application.vo;
+package com.rakuten.ross.aurora.application.dto;
 
 import com.rakuten.ross.aurora.core.layer.Dto;
 import io.swagger.v3.oas.annotations.media.Schema;

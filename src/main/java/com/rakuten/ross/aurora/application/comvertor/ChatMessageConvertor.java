@@ -1,8 +1,8 @@
 package com.rakuten.ross.aurora.application.comvertor;
 
 import java.util.List;
-import com.rakuten.ross.aurora.application.vo.ChatMessageContentDto;
-import com.rakuten.ross.aurora.application.vo.ChatMessageDto;
+import com.rakuten.ross.aurora.application.dto.ChatMessageContentDto;
+import com.rakuten.ross.aurora.application.dto.ChatMessageDto;
 import com.rakuten.ross.aurora.domain.model.ChatMessage;
 import com.rakuten.ross.aurora.domain.model.ChatMessageContent;
 import lombok.RequiredArgsConstructor;
