@@ -32,9 +32,9 @@ public final class ChatHistory implements DomainModel {
 
 	public ChatMessage getLast() {
 		if (CollectionUtils.isNotEmpty(this.getNewMessages())) {
-			return this.getNewMessages().get(this.getNewMessages().size()-1);
+			return this.getNewMessages().get(this.getNewMessages().size() - 1);
 		}
-		return this.getOldMessages().get(this.getNewMessages().size()-1);
+		return this.getOldMessages().get(this.getNewMessages().size() - 1);
 	}
 
 	public List<Message> restorePromptMessages(int keepSize) {

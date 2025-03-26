@@ -13,7 +13,7 @@ public class ChatResponse {
 
 	private String replyMessageId;
 
-	public enum Type{
+	public enum Type {
 		text,
 		meta,
 	}

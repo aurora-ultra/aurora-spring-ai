@@ -1,4 +1,4 @@
-package com.rakuten.ross.aurora.application.ablity.tools;
+package com.rakuten.ross.aurora.application.tools;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.tool.annotation.Tool;

@@ -1,6 +1,6 @@
 package com.rakuten.ross.aurora.ability.support;
 
-import com.rakuten.ross.aurora.application.ablity.tools.support.InternalUrlReader;
+import com.rakuten.ross.aurora.app.chat.tools.support.InternalUrlReader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

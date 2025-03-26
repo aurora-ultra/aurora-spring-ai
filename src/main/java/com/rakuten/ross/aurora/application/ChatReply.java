@@ -11,6 +11,4 @@ import reactor.core.publisher.Flux;
 public class ChatReply {
 	private final Flux<ChatMessage> reply;
 	private final Flux<ChatMessageContent> contents;
-
-
 }

@@ -5,10 +5,10 @@ public class ChatException extends RuntimeException {
 	private ChatException(String message) {
 		super(message);
 	}
+
 	private ChatException(String message, Throwable cause) {
 		super(message, cause);
 	}
-
 
 
 	public static ChatException of(String message, Throwable cause) {

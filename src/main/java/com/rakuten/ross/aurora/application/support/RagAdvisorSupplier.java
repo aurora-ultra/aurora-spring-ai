@@ -1,6 +1,5 @@
 package com.rakuten.ross.aurora.application.support;
 
-import java.util.Optional;
 import com.rakuten.ross.aurora.application.ChatAdvisorSupplier;
 import com.rakuten.ross.aurora.application.ChatContext;
 import lombok.RequiredArgsConstructor;
