@@ -24,7 +24,7 @@ public class ChatResource {
 
 	private final ChatService chatService;
 
-	@PostMapping(path = "/{conversionId}", produces = MediaType.APPLICATION_NDJSON_VALUE)
+	@PostMapping(path = "/{conversionId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	public Flux<ChatResponse> chat(@PathVariable("conversionId") String conversionId, @RequestBody @Validated ChatRequest request) {
 		var command = ChatCommand.builder()
 				.conversationId(conversionId)
