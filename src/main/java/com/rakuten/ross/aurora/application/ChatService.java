@@ -2,6 +2,7 @@ package com.rakuten.ross.aurora.application;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Consumer;
 import com.rakuten.ross.aurora.application.command.ChatCommand;
 import com.rakuten.ross.aurora.application.command.ConversationStartCommand;
 import com.rakuten.ross.aurora.application.utils.ChatResponsesUtils;
@@ -16,6 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.api.Advisor;
+import org.springframework.ai.chat.prompt.ChatOptions;
+import org.springframework.ai.tool.ToolCallbacks;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -23,7 +26,7 @@ import reactor.core.publisher.Mono;
 @Service
 @RequiredArgsConstructor
 public class ChatService {
-	public static final int CHAT_RESPONSE_BUFFER_SIZE = 8;
+	public static final int CHAT_RESPONSE_BUFFER_SIZE = 24;
 
 	private final TimeProvider timeProvider;
 	private final ChatManager chatManager;
@@ -74,40 +77,43 @@ public class ChatService {
 		var advisors = getAdvisors(context);
 		var tools = getTools(context);
 
-		chatHistory.add(userMessage);
-		chatManager.saveChatHistory(chatHistory);
 
-		var maxHistorySize = context.getChatOption().getHistorySize();
+
+		var maxHistorySize = context.getChatOption().getChatHistorySize();
 		var reply = new StringBuffer();
 
 		var contents = chatClient
 				.prompt()
+//				.options(getOptions(context))
 				.advisors(advisors)
-				.tools(tools)
 				.messages(conversation.createPromptMessages())
 				.messages(chatHistory.restorePromptMessages(maxHistorySize))
 				.messages(userMessage.createPromptMessages())
+				.tools(ToolCallbacks.from(tools.toArray()))
 				.stream()
 				.chatResponse()
 				.buffer(CHAT_RESPONSE_BUFFER_SIZE)
 				.map(ChatResponsesUtils::getTextContent)
 				.filter(StringUtils::isNotBlank)
 				.doOnNext(reply::append)
-				.map(ChatMessageContent::of);
-
-		var message = contents.then(
-				Mono.just(reply)
-						.map(StringBuffer::toString)
-						.map(userMessage::reply)
-						.doOnNext(replyMessage -> {
-							chatHistory.add(replyMessage);
-							chatManager.saveChatHistory(chatHistory);
-						})
-		);
+				.map(ChatMessageContent::of)
+				.doOnComplete(() -> {
+					var replyMessage = userMessage.reply(reply.toString());
+					chatHistory.add(userMessage);
+					chatHistory.add(replyMessage);
+					chatManager.saveChatHistory(chatHistory);
+					chatHistory.flush();
+				});
 
 		return ChatReply.builder()
 				.contents(contents)
-				.message(message)
+				.message(Mono.defer(() -> Mono.just(chatHistory.getLast())))
+				.build();
+	}
+
+	private ChatOptions getOptions(ChatContext context) {
+		return ChatOptions.builder()
+				.model(context.getChatOption().getModel())
 				.build();
 	}
 

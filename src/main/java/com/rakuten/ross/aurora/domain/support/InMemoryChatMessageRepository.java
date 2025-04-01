@@ -20,6 +20,7 @@ public class InMemoryChatMessageRepository implements ChatMessageRepository {
 
 	@Override
 	public List<ChatMessage> listByConversation(String conversationId) {
-		return store.computeIfAbsent(conversationId, k -> new ArrayList<>());
+		var list = store.computeIfAbsent(conversationId, k -> new ArrayList<>());
+		return new ArrayList<>(list);
 	}
 }

@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.chat.prompt.ChatOptions;
+import org.springframework.lang.Contract;
 import org.springframework.stereotype.Component;
 
 @Slf4j

@@ -9,8 +9,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class WebSearchTools implements ChatTool {
 
-	@Tool(description = "在互联网搜索相关资料")
+	@Tool(description = "互联网搜索新闻")
 	public String search(String search) {
+		log.info("search from internet: {}", search);
 		return """
 				搜索结果：你好，我是地球
 				""";

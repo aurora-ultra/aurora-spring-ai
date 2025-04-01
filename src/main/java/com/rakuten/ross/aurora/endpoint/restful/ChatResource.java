@@ -33,9 +33,10 @@ public class ChatResource {
 				.conversationId(conversionId)
 				.content(request.getUserInput())
 				.option(ChatOption.builder()
+						.retrieve(request.isRetrieve())
 						.search(request.isSearch())
-						.searchTopK(3)
-						.historySize(5)
+						.retrieveTopK(3)
+						.chatHistorySize(5)
 						.build())
 				.build();
 		var reply = chatService.chat(command);

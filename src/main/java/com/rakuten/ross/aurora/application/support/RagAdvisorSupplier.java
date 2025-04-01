@@ -31,13 +31,13 @@ public class RagAdvisorSupplier implements ChatAdvisorSupplier {
 
 	@Override
 	public boolean support(ChatContext context) {
-		return context.getChatOption().isSearch();
+		return context.getChatOption().isRetrieve();
 	}
 
 	@Override
 	public Advisor getAdvisor(ChatContext context) {
 		var request = SearchRequest.builder()
-				.topK(NumberUtils.max(context.getChatOption().getSearchTopK(), DEFAULT_TOP_K))
+				.topK(NumberUtils.max(context.getChatOption().getRetrieveTopK(), DEFAULT_TOP_K))
 				.build();
 		return new QuestionAnswerAdvisor(vectorStore, request, SYSTEM_PROMPT);
 	}

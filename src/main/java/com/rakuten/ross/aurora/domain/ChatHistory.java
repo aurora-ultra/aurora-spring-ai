@@ -5,9 +5,11 @@ import java.util.List;
 import java.util.Optional;
 import com.rakuten.ross.aurora.core.layer.DomainModel;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.ai.chat.messages.Message;
 
+@Slf4j
 @Getter
 public final class ChatHistory implements DomainModel {
 
@@ -29,6 +31,7 @@ public final class ChatHistory implements DomainModel {
 
 	public void flush() {
 		oldMessages.addAll(newMessages);
+		newMessages.clear();
 	}
 
 	public ChatMessage getLast() {

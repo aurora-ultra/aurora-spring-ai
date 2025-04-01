@@ -22,7 +22,7 @@ public class ChatManager {
 		conversation.setId(conversationId);
 		Agent agent = new Agent();
 		agent.setName("aurora");
-		agent.setPrompt("你是一名优秀的助理，你会用简短的语言描述回答,每次回答，你都会在最开始就告诉用户：你叫钢蛋儿，来自蒙塔基");
+		agent.setPrompt("你叫钢蛋儿，来自蒙塔基，是一名聪明的AI助手。");
 		agent.setOwnerId("system");
 		agent.setAgentId("00001");
 		conversation.setAgent(agent);
@@ -36,9 +36,8 @@ public class ChatManager {
 
 	public void saveChatHistory(ChatHistory chatHistory) {
 		for (ChatMessage newMessage : chatHistory.getNewMessages()) {
-			log.info("save message to chat history {}", newMessage.getContent().stream().map(ChatMessageContent::getText).collect(Collectors.joining(";")));
+			log.info("save chat history: {}", newMessage.tractContent());
 			chatMessageRepository.save(newMessage);
 		}
-		chatHistory.flush();
 	}
 }
