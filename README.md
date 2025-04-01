@@ -3,6 +3,12 @@
 ## Introduction
 Aurora Spring Boot is a LLM application which show you how to create LLM application with spring-boot and spring-ai.
 
+## Purpose
+- Quickly learn how to use Spring AI to create LLM applications
+- Serve as a scaffolding for new projects
+- Act as a learning example
+- Learn how to design strategy patterns at key points to achieve architectural flexibility
+
 ## Getting Started
 
 ### Prerequisites
