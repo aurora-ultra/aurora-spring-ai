@@ -1,4 +1,4 @@
-package com.rakuten.ross.aurora.application.command;
+package com.rakuten.ross.aurora.application;
 
 import java.io.Serializable;
 import lombok.Builder;
@@ -12,5 +12,7 @@ import lombok.RequiredArgsConstructor;
 public class ChatOption implements Serializable {
 
 	private final boolean search;
+	private final int searchTopK;
+	private final int historySize;
 
 }

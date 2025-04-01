@@ -1,5 +1,6 @@
 package com.rakuten.ross.aurora.application.command;
 
+import com.rakuten.ross.aurora.application.ChatOption;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

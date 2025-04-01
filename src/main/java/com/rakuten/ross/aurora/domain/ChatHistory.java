@@ -2,6 +2,7 @@ package com.rakuten.ross.aurora.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import com.rakuten.ross.aurora.core.layer.DomainModel;
 import lombok.Getter;
 import org.apache.commons.collections4.CollectionUtils;
@@ -31,10 +32,10 @@ public final class ChatHistory implements DomainModel {
 	}
 
 	public ChatMessage getLast() {
-		if (CollectionUtils.isNotEmpty(this.getNewMessages())) {
-			return this.getNewMessages().get(this.getNewMessages().size() - 1);
-		}
-		return this.getOldMessages().get(this.getNewMessages().size() - 1);
+		var messages = Optional.ofNullable(this.getNewMessages())
+				.filter(CollectionUtils::isNotEmpty)
+				.orElseGet(this::getOldMessages);
+		return messages.get(messages.size() - 1);
 	}
 
 	public List<Message> restorePromptMessages(int keepSize) {

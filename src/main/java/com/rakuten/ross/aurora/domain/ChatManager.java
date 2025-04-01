@@ -39,7 +39,6 @@ public class ChatManager {
 			log.info("save message to chat history {}", newMessage.getContent().stream().map(ChatMessageContent::getText).collect(Collectors.joining(";")));
 			chatMessageRepository.save(newMessage);
 		}
-
 		chatHistory.flush();
 	}
 }

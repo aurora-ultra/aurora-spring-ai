@@ -17,20 +17,20 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.api.Advisor;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ChatService {
-	public static final int CHAT_RESPONSE_BUFFER_SIZE = 2;
-	public static final int MAX_HISTORY_SIZE = 5;
+	public static final int CHAT_RESPONSE_BUFFER_SIZE = 8;
 
 	private final TimeProvider timeProvider;
 	private final ChatManager chatManager;
 
-	private final List<ChatAdvisorSupplier> chatAdvisorSuppliers;
+	private final List<ChatToolSupplier> chatToolSuppliers;
 	private final List<ChatClientSupplier> chatClientSuppliers;
+	private final List<ChatAdvisorSupplier> chatAdvisorSuppliers;
 
 	public Conversation startConversation(ConversationStartCommand command) {
 		var conversation = Conversation.of(UUID.randomUUID().toString(), timeProvider.now());
@@ -38,48 +38,54 @@ public class ChatService {
 		return conversation;
 	}
 
-
-	// when		who		what			where			how
-	// -------------------------------------------------------------
-	// now		user 	userMessage		conversation	chatOption
-	// todo can we use spring to implement the history or replace with summary?
-	public ChatReply chat(ChatCommand command) {
-		var user = User.mock();
-		var chatOption = command.getOption();
-		var conversation = chatManager.getOrCreateConversation(command.getConversationId());
-		var chatHistory = chatManager.getChatHistory(command.getConversationId());
-		var userMessage = ChatMessage.user()
-				.conversationId(command.getConversationId())
-				.messageId(UUID.randomUUID().toString())
-				.content(List.of(ChatMessageContent.of(command.getContent())))
-				.sendTime(timeProvider.now())
-				.build();
-		var context = ChatContext.builder()
-				.user(user)
-				.userMessage(userMessage)
-				.chatHistory(chatHistory)
-				.chatOption(chatOption)
-				.conversation(conversation)
-				.build();
-		return this.chat(context);
+	public ChatReply chat(ChatCommand command) throws ChatException {
+		// when		who		what			where			how
+		// -------------------------------------------------------------
+		// now		user 	userMessage		conversation	chatOption
+		try {
+			var user = User.mock();
+			var chatOption = command.getOption();
+			var conversation = chatManager.getOrCreateConversation(command.getConversationId());
+			var chatHistory = chatManager.getChatHistory(command.getConversationId());
+			var userMessage = ChatMessage.user()
+					.conversationId(command.getConversationId())
+					.messageId(UUID.randomUUID().toString())
+					.content(List.of(ChatMessageContent.of(command.getContent())))
+					.sendTime(timeProvider.now())
+					.build();
+			var context = ChatContext.builder()
+					.user(user)
+					.userMessage(userMessage)
+					.chatHistory(chatHistory)
+					.chatOption(chatOption)
+					.conversation(conversation)
+					.build();
+			return this.chat(context);
+		} catch (Exception e) {
+			throw ChatException.of("Something wrong when processing the chat command", e);
+		}
 	}
 
-	private ChatReply chat(ChatContext context) {
+	private ChatReply chat(ChatContext context) throws ChatException {
 		var conversation = context.getConversation();
 		var chatHistory = context.getChatHistory();
 		var userMessage = context.getUserMessage();
 		var chatClient = getChatClient(context);
 		var advisors = getAdvisors(context);
-		var reply = new StringBuffer();
+		var tools = getTools(context);
 
 		chatHistory.add(userMessage);
 		chatManager.saveChatHistory(chatHistory);
 
+		var maxHistorySize = context.getChatOption().getHistorySize();
+		var reply = new StringBuffer();
+
 		var contents = chatClient
 				.prompt()
 				.advisors(advisors)
+				.tools(tools)
 				.messages(conversation.createPromptMessages())
-				.messages(chatHistory.restorePromptMessages(MAX_HISTORY_SIZE))
+				.messages(chatHistory.restorePromptMessages(maxHistorySize))
 				.messages(userMessage.createPromptMessages())
 				.stream()
 				.chatResponse()
@@ -87,16 +93,21 @@ public class ChatService {
 				.map(ChatResponsesUtils::getTextContent)
 				.filter(StringUtils::isNotBlank)
 				.doOnNext(reply::append)
-				.map(ChatMessageContent::of)
-				.doOnComplete(() -> {
-					var replyMessage = userMessage.reply(reply.toString());
-					chatHistory.add(replyMessage);
-					chatManager.saveChatHistory(chatHistory);
-				});
+				.map(ChatMessageContent::of);
+
+		var message = contents.then(
+				Mono.just(reply)
+						.map(StringBuffer::toString)
+						.map(userMessage::reply)
+						.doOnNext(replyMessage -> {
+							chatHistory.add(replyMessage);
+							chatManager.saveChatHistory(chatHistory);
+						})
+		);
 
 		return ChatReply.builder()
 				.contents(contents)
-				.reply(Flux.defer(() -> Flux.just(chatHistory.getLast())))
+				.message(message)
 				.build();
 	}
 
@@ -108,13 +119,21 @@ public class ChatService {
 				.toList();
 	}
 
-	private ChatClient getChatClient(ChatContext context) {
+	private List<ChatTool> getTools(ChatContext context) {
+		return chatToolSuppliers
+				.stream()
+				.filter(supplier -> supplier.support(context))
+				.map(supplier -> supplier.getTool(context))
+				.toList();
+	}
+
+	private ChatClient getChatClient(ChatContext context) throws ChatException {
 		return chatClientSuppliers
 				.stream()
 				.filter(chatAdvisorSupplier -> chatAdvisorSupplier.support(context))
 				.map(chatAdvisorSupplier -> chatAdvisorSupplier.getChatClient(context))
 				.findFirst()
-				.orElseThrow(() -> ChatException.of("unknown how to create the chat client"));
+				.orElseThrow(() -> ChatException.of("unknown how to create the chat client, maybe you need to add a chat client supplier?"));
 	}
 
 

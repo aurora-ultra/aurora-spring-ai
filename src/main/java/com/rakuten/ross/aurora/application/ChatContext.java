@@ -1,6 +1,5 @@
 package com.rakuten.ross.aurora.application;
 
-import com.rakuten.ross.aurora.application.command.ChatOption;
 import com.rakuten.ross.aurora.domain.ChatHistory;
 import com.rakuten.ross.aurora.domain.ChatMessage;
 import com.rakuten.ross.aurora.domain.Conversation;

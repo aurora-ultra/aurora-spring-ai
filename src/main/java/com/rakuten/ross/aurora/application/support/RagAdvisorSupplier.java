@@ -4,6 +4,7 @@ import com.rakuten.ross.aurora.application.ChatAdvisorSupplier;
 import com.rakuten.ross.aurora.application.ChatContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.client.advisor.api.Advisor;
 import org.springframework.ai.vectorstore.SearchRequest;
@@ -14,8 +15,19 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class RagAdvisorSupplier implements ChatAdvisorSupplier {
+	private final static int DEFAULT_TOP_K = 3;
 
 	private final VectorStore vectorStore;
+
+	private final static String SYSTEM_PROMPT = """
+			上下文信息如下，用 --------------------- 包围
+			
+			---------------------
+			{question_answer_context}
+			---------------------
+			
+			根据上下文和提供的历史信息（而非先验知识）回复用户评论。如果答案不在上下文中，请告知用户你无法回答该问题。
+			""";
 
 	@Override
 	public boolean support(ChatContext context) {
@@ -24,21 +36,10 @@ public class RagAdvisorSupplier implements ChatAdvisorSupplier {
 
 	@Override
 	public Advisor getAdvisor(ChatContext context) {
-		return new QuestionAnswerAdvisor(
-				vectorStore,
-				SearchRequest.builder()
-						.topK(2)
-						.build(),
-				"""
-				上下文信息如下，用 --------------------- 包围
-				
-				---------------------
-				{question_answer_context}
-				---------------------
-				
-				根据上下文和提供的历史信息（而非先验知识）回复用户评论。如果答案不在上下文中，请告知用户你无法回答该问题。
-				"""
-		);
+		var request = SearchRequest.builder()
+				.topK(NumberUtils.max(context.getChatOption().getSearchTopK(), DEFAULT_TOP_K))
+				.build();
+		return new QuestionAnswerAdvisor(vectorStore, request, SYSTEM_PROMPT);
 	}
 
 }
