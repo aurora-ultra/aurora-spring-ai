@@ -1,8 +1,10 @@
 package com.rakuten.ross.aurora.application;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import com.rakuten.ross.aurora.application.command.ChatCommand;
 import com.rakuten.ross.aurora.application.command.ConversationStartCommand;
 import com.rakuten.ross.aurora.application.utils.ChatResponsesUtils;
@@ -18,6 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.api.Advisor;
 import org.springframework.ai.chat.prompt.ChatOptions;
+import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.tool.ToolCallbacks;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -27,6 +30,8 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class ChatService {
 	public static final int CHAT_RESPONSE_BUFFER_SIZE = 24;
+	public static final String CHAT_TOOLS_CHOSEN_MODEL = "gpt-3.5-turbo";
+
 
 	private final TimeProvider timeProvider;
 	private final ChatManager chatManager;
@@ -70,21 +75,18 @@ public class ChatService {
 	}
 
 	private ChatReply chat(ChatContext context) throws ChatException {
+		var advisors = getAdvisors(context);
+		var tools = getTools(context);
+		var chatClient = getChatClient(context);
 		var conversation = context.getConversation();
 		var chatHistory = context.getChatHistory();
 		var userMessage = context.getUserMessage();
-		var chatClient = getChatClient(context);
-		var advisors = getAdvisors(context);
-		var tools = getTools(context);
-
-
 
 		var maxHistorySize = context.getChatOption().getChatHistorySize();
 		var reply = new StringBuffer();
 
 		var contents = chatClient
 				.prompt()
-//				.options(getOptions(context))
 				.advisors(advisors)
 				.messages(conversation.createPromptMessages())
 				.messages(chatHistory.restorePromptMessages(maxHistorySize))
@@ -111,25 +113,12 @@ public class ChatService {
 				.build();
 	}
 
-	private ChatOptions getOptions(ChatContext context) {
-		return ChatOptions.builder()
-				.model(context.getChatOption().getModel())
-				.build();
-	}
 
 	private List<Advisor> getAdvisors(ChatContext context) {
 		return chatAdvisorSuppliers
 				.stream()
 				.filter(chatAdvisorSupplier -> chatAdvisorSupplier.support(context))
 				.map(chatAdvisorSupplier -> chatAdvisorSupplier.getAdvisor(context))
-				.toList();
-	}
-
-	private List<ChatTool> getTools(ChatContext context) {
-		return chatToolSuppliers
-				.stream()
-				.filter(supplier -> supplier.support(context))
-				.map(supplier -> supplier.getTool(context))
 				.toList();
 	}
 
@@ -140,6 +129,48 @@ public class ChatService {
 				.map(chatAdvisorSupplier -> chatAdvisorSupplier.getChatClient(context))
 				.findFirst()
 				.orElseThrow(() -> ChatException.of("unknown how to create the chat client, maybe you need to add a chat client supplier?"));
+	}
+
+	private List<ChatTool> getTools(ChatContext context) throws ChatException {
+		var tools = chatToolSuppliers
+				.stream()
+				.filter(supplier -> supplier.support(context))
+				.map(supplier -> supplier.getTool(context))
+				.toList();
+
+		if (tools.isEmpty()) {
+			return tools;
+		}
+		var toolDescription = tools.stream()
+				.map(chatTool -> String.format("- %s: %s", chatTool.getName(), chatTool.getDescription()))
+				.collect(Collectors.joining("\n"));
+		var systemPrompt = "You will determine what tools to use based on the user's problem."
+				+ "Please directly reply the tool names with delimiters ',', for example: tool1, tool2 ."
+				+ "The tools are: \n"
+				+ toolDescription;
+
+		var toolsDecision = getChatClient(context)
+				.prompt()
+				.options(ChatOptions.builder()
+						.model(CHAT_TOOLS_CHOSEN_MODEL)
+						.build())
+				.system(systemPrompt)
+				.user(context.getUserMessage().tractContent())
+				.call()
+				.content();
+
+		if (StringUtils.isBlank(toolsDecision)) {
+			return new ArrayList<>();
+		}
+
+		var chosen = Arrays.asList(toolsDecision.split(","));
+		log.info("tools chosen: {}", chosen);
+
+		tools = tools.stream()
+				.filter(chatTool -> chosen.contains(chatTool.getName()))
+				.toList();
+
+		return tools;
 	}
 
 

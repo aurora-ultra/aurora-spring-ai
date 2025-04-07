@@ -11,8 +11,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ChatOption implements Serializable {
 
-	private final boolean retrieve;
-	private final boolean search;
+	private final boolean enableInternalSearch;
+	private final boolean enableExternalSearch;
+	private final boolean enableExampleTools;
+
 	private final int retrieveTopK;
 	private final int chatHistorySize;
 

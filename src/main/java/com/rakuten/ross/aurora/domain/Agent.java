@@ -1,5 +1,6 @@
 package com.rakuten.ross.aurora.domain;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import com.rakuten.ross.aurora.core.layer.DomainModel;
@@ -23,6 +24,8 @@ public class Agent implements DomainModel, PromptMessageProvider {
 
 	public List<Message> createPromptMessages() {
 		var messages = new ArrayList<Message>();
+
+		messages.add(new SystemMessage("Now is "+ LocalDateTime.now()));
 
 		if (StringUtils.isNotBlank(this.getPrompt())) {
 			messages.add(new SystemMessage(this.getPrompt()));
