@@ -4,15 +4,13 @@ spring:
 
   ai:
     openai:
-      api-key: sk-SgvKCkKZMKjQua9Y45D61aF17c824832A6Ff339544A7E1A4
-      base-url: https://aiapi.cubeai.com.cn
+
       chat:
         options:
           model: gpt-4o-mini
       embedding:
         enabled: true
-        api-key: sk-SgvKCkKZMKjQua9Y45D61aF17c824832A6Ff339544A7E1A4
-        base-url: https://aiapi.cubeai.com.cn
+
         options:
           model: "text-embedding-ada-002"
 
