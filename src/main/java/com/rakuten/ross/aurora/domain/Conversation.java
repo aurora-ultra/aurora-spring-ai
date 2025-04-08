@@ -20,15 +20,20 @@ public class Conversation implements DomainModel, PromptMessageProvider {
 
 	private Agent agent;
 
-	public static Conversation of(String id, LocalDateTime startTime) {
+	public static Conversation of(String id, LocalDateTime startTime, Agent agent) {
 		var conversation = new Conversation();
 		conversation.setId(id);
 		conversation.setStartTime(startTime);
+		conversation.setAgent(agent);
 		return conversation;
 	}
 
 	@Override
 	public List<Message> createPromptMessages() {
 		return agent.createPromptMessages();
+	}
+
+	public int getMemorySize() {
+		return agent.getMemorySize();
 	}
 }

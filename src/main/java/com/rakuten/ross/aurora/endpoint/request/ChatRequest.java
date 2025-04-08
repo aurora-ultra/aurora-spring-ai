@@ -1,4 +1,4 @@
-package com.rakuten.ross.aurora.endpoint.model;
+package com.rakuten.ross.aurora.endpoint.request;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;

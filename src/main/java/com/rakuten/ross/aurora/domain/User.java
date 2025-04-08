@@ -11,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class User implements DomainModel {
 
-	// username is the unique  user identifier which can communicate with all application in aurora's.
+	// username is the unique user identifier which can communicate with all application in aurora's.
 	private final String username;
 
 	public static User mock() {

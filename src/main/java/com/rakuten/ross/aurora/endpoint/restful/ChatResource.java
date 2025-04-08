@@ -2,12 +2,11 @@ package com.rakuten.ross.aurora.endpoint.restful;
 
 import com.rakuten.ross.aurora.application.ChatException;
 import com.rakuten.ross.aurora.application.ChatOption;
+import com.rakuten.ross.aurora.application.ChatReply;
 import com.rakuten.ross.aurora.application.ChatService;
 import com.rakuten.ross.aurora.application.command.ChatCommand;
-import com.rakuten.ross.aurora.domain.ChatMessage;
-import com.rakuten.ross.aurora.domain.ChatMessageContent;
-import com.rakuten.ross.aurora.endpoint.model.ChatRequest;
-import com.rakuten.ross.aurora.endpoint.model.ChatResponse;
+import com.rakuten.ross.aurora.endpoint.request.ChatRequest;
+import com.rakuten.ross.aurora.endpoint.request.ChatResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -34,30 +33,21 @@ public class ChatResource {
 				.content(request.getUserInput())
 				.option(ChatOption.builder()
 						.enableInternalSearch(false)
-						.enableExternalSearch(true)
-						.enableExampleTools(true)
+						.enableExternalSearch(false)
+						.enableExampleTools(false)
+						.enableMemory(true)
 						.retrieveTopK(3)
-						.chatHistorySize(5)
 						.build())
 				.build();
-		var reply = chatService.chat(command);
-		var contents = reply.getContents().map(this::toResponse);
-		var message = reply.getMessage().map(this::toResponse);
-		return contents.concatWith(message);
+		return chatService.chat(command)
+				.getContents()
+				.map(this::toResponse);
 	}
 
-	private ChatResponse toResponse(ChatMessage chatMessage) {
+	private ChatResponse toResponse(ChatReply.Content content) {
 		ChatResponse chatResponse = new ChatResponse();
-		chatResponse.setMessageId(chatMessage.getMessageId());
-		chatResponse.setReplyMessageId(chatMessage.getReplyMessageId());
-		chatResponse.setType(ChatResponse.Type.meta);
+		chatResponse.setContent(content.getText());
 		return chatResponse;
 	}
 
-	private ChatResponse toResponse(ChatMessageContent chatMessage) {
-		ChatResponse chatResponse = new ChatResponse();
-		chatResponse.setContent(chatMessage.getText());
-		chatResponse.setType(ChatResponse.Type.text);
-		return chatResponse;
-	}
 }

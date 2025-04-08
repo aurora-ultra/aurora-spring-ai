@@ -3,27 +3,22 @@ package com.rakuten.ross.aurora.application;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import com.rakuten.ross.aurora.application.command.ChatCommand;
 import com.rakuten.ross.aurora.application.command.ConversationStartCommand;
-import com.rakuten.ross.aurora.application.utils.ChatResponsesUtils;
-import com.rakuten.ross.aurora.core.support.TimeProvider;
 import com.rakuten.ross.aurora.domain.ChatManager;
-import com.rakuten.ross.aurora.domain.ChatMessage;
-import com.rakuten.ross.aurora.domain.ChatMessageContent;
 import com.rakuten.ross.aurora.domain.Conversation;
 import com.rakuten.ross.aurora.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.api.Advisor;
+import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.prompt.ChatOptions;
-import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.tool.ToolCallbacks;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Mono;
 
 @Slf4j
 @Service
@@ -32,8 +27,6 @@ public class ChatService {
 	public static final int CHAT_RESPONSE_BUFFER_SIZE = 24;
 	public static final String CHAT_TOOLS_CHOSEN_MODEL = "gpt-3.5-turbo";
 
-
-	private final TimeProvider timeProvider;
 	private final ChatManager chatManager;
 
 	private final List<ChatToolSupplier> chatToolSuppliers;
@@ -41,30 +34,19 @@ public class ChatService {
 	private final List<ChatAdvisorSupplier> chatAdvisorSuppliers;
 
 	public Conversation startConversation(ConversationStartCommand command) {
-		var conversation = Conversation.of(UUID.randomUUID().toString(), timeProvider.now());
-		chatManager.saveConversation(conversation);
-		return conversation;
+		// todo implement this method
+		throw new NotImplementedException();
 	}
 
 	public ChatReply chat(ChatCommand command) throws ChatException {
-		// when		who		what			where			how
-		// -------------------------------------------------------------
-		// now		user 	userMessage		conversation	chatOption
 		try {
 			var user = User.mock();
 			var chatOption = command.getOption();
-			var conversation = chatManager.getOrCreateConversation(command.getConversationId());
-			var chatHistory = chatManager.getChatHistory(command.getConversationId());
-			var userMessage = ChatMessage.user()
-					.conversationId(command.getConversationId())
-					.messageId(UUID.randomUUID().toString())
-					.content(List.of(ChatMessageContent.of(command.getContent())))
-					.sendTime(timeProvider.now())
-					.build();
+			var conversation = getConversation(command.getConversationId());
+			var userMessage = createUserMessage(command);
 			var context = ChatContext.builder()
 					.user(user)
 					.userMessage(userMessage)
-					.chatHistory(chatHistory)
 					.chatOption(chatOption)
 					.conversation(conversation)
 					.build();
@@ -74,45 +56,40 @@ public class ChatService {
 		}
 	}
 
+
 	private ChatReply chat(ChatContext context) throws ChatException {
-		var advisors = getAdvisors(context);
 		var tools = getTools(context);
+		var advisors = getAdvisors(context);
 		var chatClient = getChatClient(context);
 		var conversation = context.getConversation();
-		var chatHistory = context.getChatHistory();
 		var userMessage = context.getUserMessage();
-
-		var maxHistorySize = context.getChatOption().getChatHistorySize();
-		var reply = new StringBuffer();
 
 		var contents = chatClient
 				.prompt()
 				.advisors(advisors)
 				.messages(conversation.createPromptMessages())
-				.messages(chatHistory.restorePromptMessages(maxHistorySize))
-				.messages(userMessage.createPromptMessages())
+				.messages(userMessage)
 				.tools(ToolCallbacks.from(tools.toArray()))
+				.toolContext(context.getAttributes())
 				.stream()
-				.chatResponse()
+				.content()
 				.buffer(CHAT_RESPONSE_BUFFER_SIZE)
-				.map(ChatResponsesUtils::getTextContent)
-				.filter(StringUtils::isNotBlank)
-				.doOnNext(reply::append)
-				.map(ChatMessageContent::of)
-				.doOnComplete(() -> {
-					var replyMessage = userMessage.reply(reply.toString());
-					chatHistory.add(userMessage);
-					chatHistory.add(replyMessage);
-					chatManager.saveChatHistory(chatHistory);
-					chatHistory.flush();
-				});
+				.map(strings -> String.join("", strings));
 
 		return ChatReply.builder()
 				.contents(contents)
-				.message(Mono.defer(() -> Mono.just(chatHistory.getLast())))
 				.build();
 	}
 
+
+	private UserMessage createUserMessage(ChatCommand command) {
+		return new UserMessage(command.getContent());
+	}
+
+
+	private Conversation getConversation(String conversationId) {
+		return chatManager.getOrCreateConversation(conversationId);
+	}
 
 	private List<Advisor> getAdvisors(ChatContext context) {
 		return chatAdvisorSuppliers
@@ -144,10 +121,11 @@ public class ChatService {
 		var toolDescription = tools.stream()
 				.map(chatTool -> String.format("- %s: %s", chatTool.getName(), chatTool.getDescription()))
 				.collect(Collectors.joining("\n"));
-		var systemPrompt = "You will determine what tools to use based on the user's problem."
-				+ "Please directly reply the tool names with delimiters ',', for example: tool1, tool2 ."
-				+ "The tools are: \n"
-				+ toolDescription;
+		var systemPrompt = "You will determine what tools to use based on the user's problem." +
+				"Please directly reply the tool names with delimiters ','. " +
+				"Reply example: tool1,tool2." +
+				"The tools are: \n" +
+				toolDescription;
 
 		var toolsDecision = getChatClient(context)
 				.prompt()
@@ -155,7 +133,7 @@ public class ChatService {
 						.model(CHAT_TOOLS_CHOSEN_MODEL)
 						.build())
 				.system(systemPrompt)
-				.user(context.getUserMessage().tractContent())
+				.messages(context.getUserMessage())
 				.call()
 				.content();
 

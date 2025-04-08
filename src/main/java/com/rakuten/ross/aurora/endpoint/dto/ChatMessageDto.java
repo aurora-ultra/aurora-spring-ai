@@ -1,4 +1,4 @@
-package com.rakuten.ross.aurora.application.dto;
+package com.rakuten.ross.aurora.endpoint.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,7 +25,7 @@ public class ChatMessageDto implements Dto {
 	private LocalDateTime sendTime;
 
 	@Schema(description = "The type of the message", example = "User")
-	private ChatMessage.Type messageType;
+	private ChatMessage.Role messageRole;
 
 	@Schema(description = "The unique identifier of the conversation", example = "123456")
 	private String conversationId;

@@ -18,14 +18,16 @@ import org.springframework.ai.chat.messages.SystemMessage;
 public class Agent implements DomainModel, PromptMessageProvider {
 
 	private String agentId;
-	private String name;
 	private String ownerId;
+
+	private String name;
 	private String prompt;
+	private Integer memorySize;
 
 	public List<Message> createPromptMessages() {
 		var messages = new ArrayList<Message>();
 
-		messages.add(new SystemMessage("Now is "+ LocalDateTime.now()));
+		messages.add(new SystemMessage("Now is " + LocalDateTime.now()));
 
 		if (StringUtils.isNotBlank(this.getPrompt())) {
 			messages.add(new SystemMessage(this.getPrompt()));

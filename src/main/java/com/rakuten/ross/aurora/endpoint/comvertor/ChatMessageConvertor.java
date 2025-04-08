@@ -1,10 +1,10 @@
-package com.rakuten.ross.aurora.application.comvertor;
+package com.rakuten.ross.aurora.endpoint.comvertor;
 
 import java.util.List;
-import com.rakuten.ross.aurora.application.dto.ChatMessageContentDto;
-import com.rakuten.ross.aurora.application.dto.ChatMessageDto;
 import com.rakuten.ross.aurora.domain.ChatMessage;
 import com.rakuten.ross.aurora.domain.ChatMessageContent;
+import com.rakuten.ross.aurora.endpoint.dto.ChatMessageContentDto;
+import com.rakuten.ross.aurora.endpoint.dto.ChatMessageDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -21,7 +21,7 @@ public class ChatMessageConvertor {
 				.setSendTime(message.getSendTime())
 				.setReplyMessageId(message.getReplyMessageId())
 				.setConversationId(message.getConversationId())
-				.setMessageType(message.getMessageType())
+				.setMessageRole(message.getRole())
 				.setContent(this.toDto(message.getContent()))
 				;
 	}

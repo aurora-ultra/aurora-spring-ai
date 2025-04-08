@@ -1,6 +1,7 @@
 package com.rakuten.ross.aurora.domain;
 
-import java.util.stream.Collectors;
+import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -13,31 +14,32 @@ public class ChatManager {
 	private final ChatMessageRepository chatMessageRepository;
 	private final ConversationRepository conversationRepository;
 
-	public void saveConversation(Conversation conversation) {
-		conversationRepository.save(conversation);
-	}
-
 	public Conversation getOrCreateConversation(String conversationId) {
 		Conversation conversation = new Conversation();
 		conversation.setId(conversationId);
-		Agent agent = new Agent();
-		agent.setName("aurora");
-		agent.setPrompt("你叫钢蛋儿，来自蒙塔基，是一名聪明的AI助手。");
-		agent.setOwnerId("system");
-		agent.setAgentId("00001");
-		conversation.setAgent(agent);
+		conversation.setStartTime(LocalDateTime.now());
+		conversation.setAgent(this.getAgent("0001"));
 		return conversation;
 	}
 
-	public ChatHistory getChatHistory(String conversionId) {
-		var messageHistories = chatMessageRepository.listByConversation(conversionId);
-		return ChatHistory.of(messageHistories);
+	public Agent getAgent(String agentId) {
+		Agent agent = new Agent();
+		agent.setAgentId(agentId);
+		agent.setName("aurora");
+		agent.setPrompt("你叫钢蛋儿，来自蒙塔基，是一名聪明的AI助手。");
+		agent.setOwnerId("system");
+		agent.setMemorySize(5);
+		return agent;
 	}
 
-	public void saveChatHistory(ChatHistory chatHistory) {
-		for (ChatMessage newMessage : chatHistory.getNewMessages()) {
-			log.info("save chat history: {}", newMessage.tractContent());
-			chatMessageRepository.save(newMessage);
+	public List<ChatMessage> getChatHistory(String conversionId, long size) {
+		return chatMessageRepository.listByConversation(conversionId);
+	}
+
+	public void saveChatHistory(List<ChatMessage> messages) {
+		for (ChatMessage message : messages) {
+			log.info("save chat history: {}", message.tractContent());
+			chatMessageRepository.save(message);
 		}
 	}
 }

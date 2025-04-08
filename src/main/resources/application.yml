@@ -4,16 +4,18 @@ spring:
 
   ai:
     openai:
-
+      api-key: ${openai.api-key}
+      base-url: ${openai.base-url}
       chat:
         options:
           model: gpt-4o-mini
       embedding:
         enabled: true
-
+        api-key: ${openai.api-key}
+        base-url: ${openai.base-url}
         options:
           model: "text-embedding-ada-002"
 
 logging:
   level:
-    'org.springframework.ai': debug
+    'org.springframework.ai': info

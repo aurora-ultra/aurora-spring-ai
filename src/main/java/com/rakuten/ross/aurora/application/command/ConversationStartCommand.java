@@ -8,5 +8,5 @@ import lombok.RequiredArgsConstructor;
 @Builder
 @RequiredArgsConstructor
 public class ConversationStartCommand {
-
+	private final String agentId;
 }

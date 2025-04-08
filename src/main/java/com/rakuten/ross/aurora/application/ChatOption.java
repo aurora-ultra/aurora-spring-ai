@@ -14,9 +14,10 @@ public class ChatOption implements Serializable {
 	private final boolean enableInternalSearch;
 	private final boolean enableExternalSearch;
 	private final boolean enableExampleTools;
+	private final boolean enableMemory;
+	private final boolean enableDebug;
 
 	private final int retrieveTopK;
-	private final int chatHistorySize;
 
 	private final String model;
 }

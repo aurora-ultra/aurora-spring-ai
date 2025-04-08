@@ -2,9 +2,9 @@ package com.rakuten.ross.aurora.endpoint.restful;
 
 import com.rakuten.ross.aurora.application.ChatService;
 import com.rakuten.ross.aurora.application.command.ConversationStartCommand;
-import com.rakuten.ross.aurora.application.comvertor.ConversationConvertor;
-import com.rakuten.ross.aurora.application.dto.ConversationDto;
-import com.rakuten.ross.aurora.endpoint.model.ConversationStartRequest;
+import com.rakuten.ross.aurora.endpoint.comvertor.ConversationConvertor;
+import com.rakuten.ross.aurora.endpoint.dto.ConversationDto;
+import com.rakuten.ross.aurora.endpoint.request.ConversationStartRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +26,7 @@ public class ConversationResource {
 		var command = ConversationStartCommand.builder()
 				.build();
 		var conversation = chatService.startConversation(command);
-		return conversationConvertor.toVo(conversation);
+		return conversationConvertor.toDto(conversation);
 	}
 
 }

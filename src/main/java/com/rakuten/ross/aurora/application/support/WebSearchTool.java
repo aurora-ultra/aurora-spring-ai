@@ -2,6 +2,7 @@ package com.rakuten.ross.aurora.application.support;
 
 import com.rakuten.ross.aurora.application.ChatTool;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +21,7 @@ public class WebSearchTool implements ChatTool {
 	}
 
 	@Tool(description = "search information from internet")
-	public String webExternalSearch(String search) {
+	public String webExternalSearch(String search, ToolContext toolContext) {
 		return """
 				搜索结果：
 				1. 最近，美国对全世界加收对等关税，引来全世界关注。

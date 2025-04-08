@@ -23,8 +23,8 @@ public class DefaultChatClientSupplier implements ChatClientSupplier {
 
 	@Override
 	public ChatClient getChatClient(ChatContext context) {
-		var options = ((OpenAiChatOptions) chatModel.getDefaultOptions())
-				.copy();
+		var options = ((OpenAiChatOptions) chatModel.getDefaultOptions()).copy();
+
 		if (StringUtils.isNotBlank(context.getChatOption().getModel())) {
 			options.setModel(context.getChatOption().getModel());
 		}

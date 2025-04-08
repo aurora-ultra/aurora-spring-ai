@@ -1,9 +1,9 @@
-package com.rakuten.ross.aurora.domain;
+package com.rakuten.ross.aurora.application;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import com.rakuten.ross.aurora.core.layer.DomainModel;
+import com.rakuten.ross.aurora.domain.ChatMessage;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -11,7 +11,7 @@ import org.springframework.ai.chat.messages.Message;
 
 @Slf4j
 @Getter
-public final class ChatHistory implements DomainModel {
+public final class ChatHistory {
 
 	private final List<ChatMessage> oldMessages;
 	private final List<ChatMessage> newMessages;
@@ -21,7 +21,7 @@ public final class ChatHistory implements DomainModel {
 		this.newMessages = new ArrayList<>();
 	}
 
-	static ChatHistory of(List<ChatMessage> messages) {
+	public static ChatHistory of(List<ChatMessage> messages) {
 		return new ChatHistory(messages);
 	}
 

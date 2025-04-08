@@ -1,0 +1,6 @@
+POST http://127.0.0.1:8080/chat/1
+Content-Type: application/json
+
+{
+  "userInput": "明天大连的天气如何?"
+}

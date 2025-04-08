@@ -1,4 +1,4 @@
-package com.rakuten.ross.aurora.application.dto;
+package com.rakuten.ross.aurora.endpoint.dto;
 
 import java.time.LocalDateTime;
 import com.rakuten.ross.aurora.core.layer.Dto;

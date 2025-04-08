@@ -20,7 +20,7 @@ import org.springframework.ai.chat.messages.UserMessage;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChatMessage implements DomainModel, PromptMessageProvider {
 
-	public enum Type {
+	public enum Role {
 		User,
 		Assistant
 	}
@@ -31,21 +31,18 @@ public class ChatMessage implements DomainModel, PromptMessageProvider {
 
 	private LocalDateTime sendTime;
 
-	private Type messageType;
+	private Role role;
 
 	private String conversationId;
 
 	private List<ChatMessageContent> content;
 
-	public boolean isType(Type type) {
-		return type == this.messageType;
-	}
 
 	@Builder(builderClassName = "AssistantTypeBuilder", builderMethodName = "assistant")
 	public static ChatMessage fromAssistant(ChatMessage userMessage, LocalDateTime sendTime, List<ChatMessageContent> content) {
 		var aroMessage = new ChatMessage();
 		aroMessage.setMessageId(UUID.randomUUID().toString());
-		aroMessage.setMessageType(Type.Assistant);
+		aroMessage.setRole(Role.Assistant);
 		aroMessage.setReplyMessageId(userMessage.getMessageId());
 		aroMessage.setConversationId(userMessage.getConversationId());
 		aroMessage.setSendTime(sendTime);
@@ -56,7 +53,7 @@ public class ChatMessage implements DomainModel, PromptMessageProvider {
 	@Builder(builderClassName = "UserTypeBuilder", builderMethodName = "user")
 	public static ChatMessage fromUser(String messageId, String conversationId, LocalDateTime sendTime, List<ChatMessageContent> content) {
 		var aroMessage = new ChatMessage();
-		aroMessage.setMessageType(Type.User);
+		aroMessage.setRole(Role.User);
 		aroMessage.setMessageId(messageId);
 		aroMessage.setSendTime(sendTime);
 		aroMessage.setConversationId(conversationId);
@@ -93,11 +90,11 @@ public class ChatMessage implements DomainModel, PromptMessageProvider {
 
 		for (ChatMessageContent chatMessageContent : this.getContent()) {
 
-			if (this.getMessageType() == Type.User) {
+			if (this.getRole() == Role.User) {
 				messages.add(new UserMessage(chatMessageContent.getText()));
 			}
 
-			if (this.getMessageType() == Type.Assistant) {
+			if (this.getRole() == Role.Assistant) {
 				messages.add(new AssistantMessage(chatMessageContent.getText()));
 			}
 
@@ -105,7 +102,7 @@ public class ChatMessage implements DomainModel, PromptMessageProvider {
 		return messages;
 	}
 
-	public String tractContent(){
+	public String tractContent() {
 		return getContent().stream()
 				.map(ChatMessageContent::getText)
 				.collect(Collectors.joining(";"));
