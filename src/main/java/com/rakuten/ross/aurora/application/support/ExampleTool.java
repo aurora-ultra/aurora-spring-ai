@@ -7,23 +7,23 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 @Slf4j
+@Order(1)
 @Component
 public class ExampleTool implements ChatTool {
 
 	@Override
 	public String getName() {
-		return "SampleTool";
+		return "天气信息搜索";
 	}
 
 	@Override
 	public String getDescription() {
 		return """
-				contains methods: forecast,
-				get date time,
-				operate local file,
+				contains methods: forecast, get date time
 				""";
 	}
 

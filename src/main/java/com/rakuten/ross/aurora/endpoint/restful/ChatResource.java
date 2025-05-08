@@ -32,10 +32,10 @@ public class ChatResource {
 				.conversationId(conversionId)
 				.content(request.getUserInput())
 				.option(ChatOption.builder()
-						.enableInternalSearch(false)
-						.enableExternalSearch(false)
-						.enableExampleTools(false)
 						.enableMemory(true)
+						.enableInternalSearch(true)
+						.enableExternalSearch(true)
+						.enableExampleTools(true)
 						.retrieveTopK(3)
 						.build())
 				.build();

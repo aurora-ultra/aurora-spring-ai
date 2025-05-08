@@ -56,7 +56,6 @@ public class ChatService {
 		}
 	}
 
-
 	private ChatReply chat(ChatContext context) throws ChatException {
 		var tools = getTools(context);
 		var advisors = getAdvisors(context);
@@ -69,7 +68,7 @@ public class ChatService {
 				.advisors(advisors)
 				.messages(conversation.createPromptMessages())
 				.messages(userMessage)
-				.tools(ToolCallbacks.from(tools.toArray()))
+				.toolCallbacks(ToolCallbacks.from(tools.toArray()))
 				.toolContext(context.getAttributes())
 				.stream()
 				.content()
@@ -81,11 +80,9 @@ public class ChatService {
 				.build();
 	}
 
-
 	private UserMessage createUserMessage(ChatCommand command) {
 		return new UserMessage(command.getContent());
 	}
-
 
 	private Conversation getConversation(String conversationId) {
 		return chatManager.getOrCreateConversation(conversationId);

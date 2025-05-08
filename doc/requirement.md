@@ -1,7 +1,0 @@
-# Requirement
-
-- chat
-- knowledge
-- 
-
-
