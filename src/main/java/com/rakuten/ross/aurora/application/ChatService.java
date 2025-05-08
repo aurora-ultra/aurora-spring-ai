@@ -148,6 +148,4 @@ public class ChatService {
 
 		return tools;
 	}
-
-
 }
