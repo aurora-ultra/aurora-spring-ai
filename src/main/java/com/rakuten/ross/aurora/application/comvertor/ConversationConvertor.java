@@ -1,7 +1,7 @@
-package com.rakuten.ross.aurora.endpoint.comvertor;
+package com.rakuten.ross.aurora.application.comvertor;
 
 import com.rakuten.ross.aurora.domain.Conversation;
-import com.rakuten.ross.aurora.endpoint.dto.ConversationDto;
+import com.rakuten.ross.aurora.application.model.ConversationDto;
 import org.springframework.stereotype.Component;
 
 @Component

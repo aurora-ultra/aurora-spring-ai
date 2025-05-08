@@ -1,4 +1,4 @@
-package com.rakuten.ross.aurora.endpoint.dto;
+package com.rakuten.ross.aurora.application.model;
 
 import java.time.LocalDateTime;
 import io.swagger.v3.oas.annotations.media.Schema;
