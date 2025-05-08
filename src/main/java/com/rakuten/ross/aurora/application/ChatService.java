@@ -105,10 +105,11 @@ public class ChatService {
 				.toList();
 
 		var systemPrompt = "You will determine what tools to use based on the user's problem." +
-				"Please directly reply the tool names with delimiters ',' and reply empty if no tools is usable " +
+				"Please directly reply the tool names with delimiters ',' " +
 				"Reply example: tool1,tool2." +
 				"The tools are: \n" +
-				String.join(",", toolSuppliers);
+				String.join(",", toolSuppliers)+
+				"Reply empty if no tools is suitable for the problem";
 
 		var toolsDecision = getChatClient(context)
 				.prompt()
@@ -133,6 +134,11 @@ public class ChatService {
 				.map(supplier -> supplier.getTool(context))
 				.map(o -> (Object) o)
 				.collect(Collectors.toList());
+
+		if(tools.isEmpty()){
+			log.info("No tools can be used for the problem");
+			return tools;
+		}
 
 		log.info("tools chosen: {}", chosen);
 
