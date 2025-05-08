@@ -28,7 +28,12 @@ public class InternalSearchAdvisorSupplier implements ChatAdvisorSupplier {
 					{question_answer_context}
 					---------------------
 					
-					根据上下文和提供的历史信息（而非先验知识）回复用户问题。如果答案不在上下文中，请告知用户你无法回答该问题。
+					根据上下文和提供的历史信息（而非先验知识）回答问题。
+					
+					遵循以下规则：
+					
+					1. 如果答案不在上下文中，就说你不知道。
+					2. 避免使用诸如“根据上下文……”或“所提供的信息……”之类的语句。
 					""")
 			.build();
 
