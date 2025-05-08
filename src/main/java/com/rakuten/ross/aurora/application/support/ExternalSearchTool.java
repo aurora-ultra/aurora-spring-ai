@@ -1,23 +1,12 @@
 package com.rakuten.ross.aurora.application.support;
 
-import com.rakuten.ross.aurora.application.ChatTool;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class ExternalSearchTool implements ChatTool {
-
-	@Override
-	public String getName() {
-		return "互联网内容搜索";
-	}
-
-	@Override
-	public String getDescription() {
-		return "从互联网搜索新闻";
-	}
+public class ExternalSearchTool {
 
 	@Tool(description = "search information from internet")
 	public String webExternalSearch(String search) {

@@ -1,10 +1,14 @@
 package com.rakuten.ross.aurora.application;
 
 
-public interface ChatToolSupplier {
+public interface ChatToolSupplier<T> {
+
+	String getName();
+
+	String getDescription();
 
 	boolean support(ChatContext context);
 
-	ChatTool getTool(ChatContext context);
+	T getTool(ChatContext context);
 
 }

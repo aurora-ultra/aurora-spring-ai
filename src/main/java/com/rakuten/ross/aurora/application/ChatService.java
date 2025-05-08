@@ -105,24 +105,17 @@ public class ChatService {
 				.orElseThrow(() -> ChatException.of("unknown how to create the chat client, maybe you need to add a chat client supplier?"));
 	}
 
-	private List<ChatTool> getTools(ChatContext context) throws ChatException {
-		var tools = chatToolSuppliers
-				.stream()
+	private List<Object> getTools(ChatContext context) throws ChatException {
+		var toolSuppliers = chatToolSuppliers.stream()
 				.filter(supplier -> supplier.support(context))
-				.map(supplier -> supplier.getTool(context))
+				.map(chatTool -> String.format("- %s: %s", chatTool.getName(), chatTool.getDescription()))
 				.toList();
 
-		if (tools.isEmpty()) {
-			return tools;
-		}
-		var toolDescription = tools.stream()
-				.map(chatTool -> String.format("- %s: %s", chatTool.getName(), chatTool.getDescription()))
-				.collect(Collectors.joining("\n"));
 		var systemPrompt = "You will determine what tools to use based on the user's problem." +
 				"Please directly reply the tool names with delimiters ',' and reply empty if no tools is usable " +
 				"Reply example: tool1,tool2." +
 				"The tools are: \n" +
-				toolDescription;
+				String.join(",", toolSuppliers);
 
 		var toolsDecision = getChatClient(context)
 				.prompt()
@@ -140,11 +133,14 @@ public class ChatService {
 
 		var chosen = Arrays.asList(toolsDecision.split(","));
 
-		tools = tools.stream()
-				.filter(chatTool -> chosen.contains(chatTool.getName()))
+		var tools = chatToolSuppliers
+				.stream()
+				.filter(supplier -> supplier.support(context))
+				.filter(supplier -> chosen.contains(supplier.getName()))
+				.map(supplier -> supplier.getTool(context))
 				.toList();
 
-		log.info("tools chosen: {}", tools.stream().map(ChatTool::getName).collect(Collectors.toSet()));
+		log.info("tools chosen: {}", chosen);
 
 		return tools;
 	}

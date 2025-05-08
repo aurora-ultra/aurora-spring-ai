@@ -1,32 +1,14 @@
 package com.rakuten.ross.aurora.application.support;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import com.rakuten.ross.aurora.application.ChatTool;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
-import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class ExampleTool implements ChatTool {
-
-	@Override
-	public String getName() {
-		return "天气信息搜索";
-	}
-
-	@Override
-	public String getDescription() {
-		return """
-				获取天气预报
-				""";
-	}
-
-
+public class ExampleTool {
 
 	@Tool(description = "get the forecast weather of the specified city and date")
 	public String getForecast(@ToolParam(description = "日期") LocalDate date,
