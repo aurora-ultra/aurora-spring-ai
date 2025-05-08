@@ -3,14 +3,13 @@ package com.rakuten.ross.aurora.application;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import com.rakuten.ross.aurora.application.command.ChatCommand;
-import com.rakuten.ross.aurora.application.command.ConversationStartCommand;
 import com.rakuten.ross.aurora.domain.ChatManager;
 import com.rakuten.ross.aurora.domain.Conversation;
 import com.rakuten.ross.aurora.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.api.Advisor;
@@ -28,14 +27,9 @@ public class ChatService {
 
 	private final ChatManager chatManager;
 
-	private final List<ChatToolSupplier> chatToolSuppliers;
+	private final List<ChatToolSupplier<?>> chatToolSuppliers;
 	private final List<ChatClientSupplier> chatClientSuppliers;
 	private final List<ChatAdvisorSupplier> chatAdvisorSuppliers;
-
-	public Conversation startConversation(ConversationStartCommand command) {
-		// todo implement this method
-		throw new NotImplementedException();
-	}
 
 	public ChatReply chat(ChatCommand command) throws ChatException {
 		try {
@@ -137,7 +131,8 @@ public class ChatService {
 				.filter(supplier -> supplier.support(context))
 				.filter(supplier -> chosen.contains(supplier.getName()))
 				.map(supplier -> supplier.getTool(context))
-				.toList();
+				.map(o -> (Object) o)
+				.collect(Collectors.toList());
 
 		log.info("tools chosen: {}", chosen);
 
