@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import com.rakuten.ross.aurora.core.layer.DomainModel;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,7 +17,7 @@ import org.springframework.ai.chat.messages.UserMessage;
 @Getter
 @Setter(AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ChatMessage implements DomainModel, PromptMessageProvider {
+public class ChatMessage implements PromptMessageProvider {
 
 	public enum Role {
 		User,
