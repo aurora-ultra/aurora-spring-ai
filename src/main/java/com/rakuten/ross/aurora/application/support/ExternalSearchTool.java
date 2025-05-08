@@ -16,7 +16,7 @@ public class ExternalSearchTool implements ChatTool {
 
 	@Override
 	public String getDescription() {
-		return "search information from internet";
+		return "从互联网搜索新闻";
 	}
 
 	@Tool(description = "search information from internet")

@@ -119,7 +119,7 @@ public class ChatService {
 				.map(chatTool -> String.format("- %s: %s", chatTool.getName(), chatTool.getDescription()))
 				.collect(Collectors.joining("\n"));
 		var systemPrompt = "You will determine what tools to use based on the user's problem." +
-				"Please directly reply the tool names with delimiters ','. " +
+				"Please directly reply the tool names with delimiters ',' and reply empty if no tools is usable " +
 				"Reply example: tool1,tool2." +
 				"The tools are: \n" +
 				toolDescription;
@@ -139,11 +139,12 @@ public class ChatService {
 		}
 
 		var chosen = Arrays.asList(toolsDecision.split(","));
-		log.info("tools chosen: {}", chosen);
 
 		tools = tools.stream()
 				.filter(chatTool -> chosen.contains(chatTool.getName()))
 				.toList();
+
+		log.info("tools chosen: {}", tools.stream().map(ChatTool::getName).collect(Collectors.toSet()));
 
 		return tools;
 	}

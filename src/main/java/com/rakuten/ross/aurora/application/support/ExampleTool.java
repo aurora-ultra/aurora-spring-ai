@@ -23,14 +23,11 @@ public class ExampleTool implements ChatTool {
 	@Override
 	public String getDescription() {
 		return """
-				contains methods: forecast, get date time
+				获取天气预报
 				""";
 	}
 
-	@Tool(description = "Get the current date and time in the user's timezone")
-	public String getCurrentDateTime() {
-		return LocalDateTime.now().atZone(LocaleContextHolder.getTimeZone().toZoneId()).toString();
-	}
+
 
 	@Tool(description = "get the forecast weather of the specified city and date")
 	public String getForecast(@ToolParam(description = "日期") LocalDate date,
