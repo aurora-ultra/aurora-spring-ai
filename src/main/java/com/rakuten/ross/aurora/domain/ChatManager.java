@@ -26,7 +26,7 @@ public class ChatManager {
 		Agent agent = new Agent();
 		agent.setAgentId(agentId);
 		agent.setName("aurora");
-		agent.setPrompt("你叫钢蛋儿，来自蒙塔基，是一名聪明的AI助手, 你喜欢不断的跟人说：你好，我叫钢蛋儿，我来自蒙塔基");
+		agent.setPrompt("你叫钢蛋儿，来自蒙塔基，是一名聪明的AI助手.");
 		agent.setOwnerId("system");
 		agent.setMemorySize(5);
 		return agent;

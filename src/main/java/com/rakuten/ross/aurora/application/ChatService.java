@@ -108,7 +108,7 @@ public class ChatService {
 				"Please directly reply the tool names with delimiters ',' " +
 				"Reply example: tool1,tool2." +
 				"The tools are: \n" +
-				String.join(",", toolSuppliers)+
+				String.join("", toolSuppliers)+ "\n"+
 				"Reply empty if no tools is suitable for the problem";
 
 		var toolsDecision = getChatClient(context)

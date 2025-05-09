@@ -33,7 +33,7 @@ public class ChatResource {
 				.content(request.getUserInput())
 				.option(ChatOption.builder()
 						.enableMemory(true)
-						.enableInternalSearch(true)
+						.enableInternalSearch(false)
 						.enableExternalSearch(true)
 						.enableExampleTools(true)
 						.retrieveTopK(3)
